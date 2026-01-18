@@ -20,8 +20,8 @@ export const MergeModal: React.FC<{
              <div className="relative w-full max-w-lg bg-white rounded-xl shadow-flyout border border-border-subtle overflow-hidden flex flex-col animate-in fade-in zoom-in-95">
                 <div className="px-6 py-4 border-b border-border-subtle bg-gray-50/50 flex justify-between items-center">
                     <div>
-                        <h3 className="font-semibold text-lg text-gray-900">Merge Resources</h3>
-                        <p className="text-xs text-gray-500">Select the main entry. Others will become chapters.</p>
+                        <h3 className="font-semibold text-lg text-gray-900">合并资源</h3>
+                        <p className="text-xs text-gray-500">选择主条目。其他将被合并为章节。</p>
                     </div>
                     <button onClick={onClose}><X className="w-5 h-5 text-gray-500" /></button>
                 </div>
@@ -38,15 +38,15 @@ export const MergeModal: React.FC<{
                             <img src={item.coverUrl} className="w-8 h-12 object-cover rounded bg-gray-200" />
                             <div className="flex-1 min-w-0">
                                 <div className="text-sm font-medium text-gray-900 truncate">{item.title}</div>
-                                <div className="text-xs text-gray-500">{item.chapters?.length || 0} chapters</div>
+                                <div className="text-xs text-gray-500">{item.chapters?.length || 0} 章</div>
                             </div>
-                            {targetId === item.id && <span className="text-xs font-bold text-primary px-2 py-0.5 bg-primary/10 rounded">Main</span>}
+                            {targetId === item.id && <span className="text-xs font-bold text-primary px-2 py-0.5 bg-primary/10 rounded">主条目</span>}
                         </div>
                     ))}
                 </div>
                 <div className="p-4 border-t border-border-subtle flex justify-end gap-3 bg-gray-50/50">
-                    <button onClick={onClose} className="px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 rounded-lg">Cancel</button>
-                    <button onClick={() => onConfirm(targetId)} className="px-4 py-2 text-sm font-medium text-white bg-primary hover:bg-primary-hover rounded-lg shadow-sm">Merge {items.length} Items</button>
+                    <button onClick={onClose} className="px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 rounded-lg">取消</button>
+                    <button onClick={() => onConfirm(targetId)} className="px-4 py-2 text-sm font-medium text-white bg-primary hover:bg-primary-hover rounded-lg shadow-sm">合并 {items.length} 项</button>
                 </div>
              </div>
         </div>

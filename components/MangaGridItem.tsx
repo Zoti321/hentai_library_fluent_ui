@@ -26,6 +26,13 @@ export const MangaGridItem: React.FC<MangaGridItemProps> = ({ manga, onClick, on
     }
   };
 
+  const getStatusLabel = (status?: string) => {
+    if (status === 'Reading') return '阅读中';
+    if (status === 'Completed') return '已完成';
+    if (status === 'Plan to Read') return '想读';
+    return status;
+  };
+
   if (viewMode === 'list') {
     return (
       <div onClick={handleClick} onContextMenu={(e) => onContextMenu(e, manga)} className={`group cursor-default flex items-center gap-4 bg-white p-2 pr-4 rounded-lg border transition-all select-none ${isSelected ? 'border-primary bg-primary/5' : 'border-border-subtle hover:bg-surface-alt'}`}>
@@ -38,7 +45,7 @@ export const MangaGridItem: React.FC<MangaGridItemProps> = ({ manga, onClick, on
         )}
         <div className="relative w-12 h-16 shrink-0 rounded-md overflow-hidden bg-gray-200"><img src={manga.coverUrl} alt={manga.title} className="w-full h-full object-cover" /></div>
         <div className="flex-1 min-w-0"><h3 className="font-semibold text-gray-900 text-sm truncate">{manga.title}</h3><div className="flex items-center gap-3 text-xs text-gray-500 mt-0.5"><span className="bg-gray-100 px-1.5 py-0.5 rounded border border-gray-200 font-medium">{manga.format}</span><span>{manga.fileSize}</span></div></div>
-        {manga.status === 'Reading' && <div className="text-xs font-medium text-primary bg-primary/10 px-2 py-1 rounded">Reading</div>}
+        {manga.status === 'Reading' && <div className="text-xs font-medium text-primary bg-primary/10 px-2 py-1 rounded">阅读中</div>}
       </div>
     );
   }
@@ -62,7 +69,7 @@ export const MangaGridItem: React.FC<MangaGridItemProps> = ({ manga, onClick, on
       </div>
       <div>
         <h3 className={`font-semibold text-sm leading-tight line-clamp-2 transition-colors ${isSelected ? 'text-primary' : 'text-gray-900 group-hover:text-primary'}`}>{manga.title}</h3>
-        <div className="flex items-center justify-between mt-1.5"><span className={`text-xs ${isSelected ? 'text-primary/80' : 'text-gray-500'}`}>{manga.chapters?.length || 0} Ch</span>{manga.status && <span className={`text-[10px] px-1.5 py-0.5 rounded font-medium ${manga.status === 'Reading' ? 'bg-primary/10 text-primary' : 'bg-gray-100 text-gray-500'}`}>{manga.status}</span>}</div>
+        <div className="flex items-center justify-between mt-1.5"><span className={`text-xs ${isSelected ? 'text-primary/80' : 'text-gray-500'}`}>{manga.chapters?.length || 0} 章</span>{manga.status && <span className={`text-[10px] px-1.5 py-0.5 rounded font-medium ${manga.status === 'Reading' ? 'bg-primary/10 text-primary' : 'bg-gray-100 text-gray-500'}`}>{getStatusLabel(manga.status)}</span>}</div>
       </div>
     </div>
   );

@@ -40,9 +40,9 @@ export const MangaCard: React.FC<MangaCardProps> = ({ data, onStartReading, onBa
           const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
           const response = await ai.models.generateContent({
               model: 'gemini-3-flash-preview',
-              contents: `Analyze the manga "${data.title}". Briefly explain its key themes, genre appeal, and why a reader might enjoy it. Keep it under 100 words.`,
+              contents: `分析漫画 "${data.title}"。简要解释其关键主题、类型吸引力以及读者可能喜欢它的原因。限制在 100 字以内。请使用中文回答。`,
           });
-          setAiAnalysis(response.text || "Could not generate analysis.");
+          setAiAnalysis(response.text || "无法生成分析。");
       } catch (e) {
           console.error(e);
       } finally {
@@ -53,11 +53,11 @@ export const MangaCard: React.FC<MangaCardProps> = ({ data, onStartReading, onBa
   const getStatusBadge = (status?: string) => {
     switch (status) {
       case 'Reading':
-        return <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded text-xs font-medium bg-primary/10 text-primary border border-primary/20 shadow-sm backdrop-blur-md">Reading</span>;
+        return <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded text-xs font-medium bg-primary/10 text-primary border border-primary/20 shadow-sm backdrop-blur-md">阅读中</span>;
       case 'Completed':
-        return <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded text-xs font-medium bg-green-500/10 text-green-700 border border-green-500/20 shadow-sm backdrop-blur-md">Completed</span>;
+        return <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded text-xs font-medium bg-green-500/10 text-green-700 border border-green-500/20 shadow-sm backdrop-blur-md">已完成</span>;
       default:
-        return <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded text-xs font-medium bg-gray-100/90 text-gray-600 border border-gray-200 shadow-sm backdrop-blur-md">{status || 'Unknown'}</span>;
+        return <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded text-xs font-medium bg-gray-100/90 text-gray-600 border border-gray-200 shadow-sm backdrop-blur-md">{status === 'Plan to Read' ? '想读' : (status || '未知')}</span>;
     }
   };
 
@@ -67,11 +67,11 @@ export const MangaCard: React.FC<MangaCardProps> = ({ data, onStartReading, onBa
         <div className="mb-4 md:mb-6 flex items-center justify-between">
             <button onClick={onBack} className="flex items-center gap-2 text-gray-600 hover:text-primary hover:bg-primary/10 px-2 py-1.5 md:px-3 md:py-2 rounded-md transition-all group">
                 <ArrowLeft className="w-4 h-4 transition-transform group-hover:-translate-x-1" />
-                <span className="text-sm font-medium">Back to Library</span>
+                <span className="text-sm font-medium">返回书库</span>
             </button>
             <div className="flex gap-1 md:gap-2">
                  {onEdit && (
-                   <button onClick={onEdit} className="p-2 text-gray-600 hover:bg-gray-100 rounded-md transition-colors border border-transparent hover:border-gray-200" title="Edit Metadata"><Pencil className="w-4 h-4"/></button>
+                   <button onClick={onEdit} className="p-2 text-gray-600 hover:bg-gray-100 rounded-md transition-colors border border-transparent hover:border-gray-200" title="编辑元数据"><Pencil className="w-4 h-4"/></button>
                  )}
                  <button className="p-2 text-gray-600 hover:bg-gray-100 rounded-md transition-colors border border-transparent hover:border-gray-200"><MoreHorizontal className="w-4 h-4" /></button>
             </div>
@@ -97,14 +97,14 @@ export const MangaCard: React.FC<MangaCardProps> = ({ data, onStartReading, onBa
            
            <div className="flex flex-col gap-2.5">
                <button onClick={onStartReading} className="w-full flex items-center justify-center gap-2 py-3 bg-primary hover:bg-primary-hover text-white rounded-lg font-semibold shadow-md transition-all active:scale-[0.98]">
-                 <Play className="w-5 h-5 fill-current" /> Start Reading
+                 <Play className="w-5 h-5 fill-current" /> 开始阅读
                </button>
                <div className="flex gap-2">
                     <button onClick={handleAnalyze} disabled={isAnalyzing || aiAnalysis !== null} className="flex-1 flex items-center justify-center gap-2 py-2.5 bg-white hover:bg-purple-50 text-purple-600 border border-purple-200 rounded-lg font-medium shadow-sm transition-all active:scale-[0.98] disabled:opacity-70 disabled:cursor-not-allowed">
-                        {isAnalyzing ? <Loader2 className="w-4 h-4 animate-spin" /> : <Sparkles className="w-4 h-4" />} AI Insight
+                        {isAnalyzing ? <Loader2 className="w-4 h-4 animate-spin" /> : <Sparkles className="w-4 h-4" />} AI 分析
                     </button>
                     {onAddChapter && (
-                        <button onClick={onAddChapter} className="px-3 py-2.5 bg-white hover:bg-gray-50 text-gray-700 border border-gray-200 rounded-lg font-medium shadow-sm transition-all active:scale-[0.98]" title="Add Chapter from Library">
+                        <button onClick={onAddChapter} className="px-3 py-2.5 bg-white hover:bg-gray-50 text-gray-700 border border-gray-200 rounded-lg font-medium shadow-sm transition-all active:scale-[0.98]" title="从书库添加章节">
                             <FilePlus className="w-4 h-4" />
                         </button>
                     )}
@@ -114,15 +114,15 @@ export const MangaCard: React.FC<MangaCardProps> = ({ data, onStartReading, onBa
            {/* Tech Stats */}
             <div className="bg-gray-50 rounded-lg p-3 border border-border-subtle flex flex-col gap-2 text-xs text-gray-500">
                 <div className="flex items-center justify-between">
-                    <span className="flex items-center gap-1.5"><HardDrive className="w-3.5 h-3.5" /> Size</span>
+                    <span className="flex items-center gap-1.5"><HardDrive className="w-3.5 h-3.5" /> 大小</span>
                     <span className="font-medium text-gray-700">{data.fileSize}</span>
                 </div>
                 <div className="flex items-center justify-between">
-                    <span className="flex items-center gap-1.5"><FolderOpen className="w-3.5 h-3.5" /> Path</span>
+                    <span className="flex items-center gap-1.5"><FolderOpen className="w-3.5 h-3.5" /> 路径</span>
                     <span className="font-medium text-gray-700 truncate max-w-[120px]" title={data.path}>.../{data.path.split('/').pop()}</span>
                 </div>
                  <div className="flex items-center justify-between">
-                    <span className="flex items-center gap-1.5"><BookMarked className="w-3.5 h-3.5" /> Format</span>
+                    <span className="flex items-center gap-1.5"><BookMarked className="w-3.5 h-3.5" /> 格式</span>
                     <span className="font-medium text-gray-700">{data.format}</span>
                 </div>
             </div>
@@ -135,7 +135,7 @@ export const MangaCard: React.FC<MangaCardProps> = ({ data, onStartReading, onBa
            <div className="mb-6 md:mb-8 border-b border-border-subtle pb-6">
               <div className="flex items-center gap-2 mb-3">
                   <span className="text-xs text-gray-500 font-medium flex items-center gap-1.5">
-                    <Clock className="w-3 h-3" /> Added {data.dateAdded || 'Recently'}
+                    <Clock className="w-3 h-3" /> 添加于 {data.dateAdded || '最近'}
                   </span>
               </div>
               
@@ -148,7 +148,7 @@ export const MangaCard: React.FC<MangaCardProps> = ({ data, onStartReading, onBa
            {aiAnalysis && (
                 <div className="mb-8 bg-gradient-to-r from-purple-50 via-white to-white rounded-xl p-5 border border-purple-100 shadow-sm animate-in fade-in slide-in-from-left-2 duration-300">
                     <div className="flex items-center gap-2 mb-3 text-purple-700 font-bold text-sm uppercase tracking-wide">
-                        <Bot className="w-4 h-4" /> Gemini Analysis
+                        <Bot className="w-4 h-4" /> Gemini 分析
                     </div>
                     <p className="text-gray-800 text-sm leading-relaxed font-medium">{aiAnalysis}</p>
                 </div>
@@ -157,14 +157,14 @@ export const MangaCard: React.FC<MangaCardProps> = ({ data, onStartReading, onBa
            {/* 3. Unified Metadata Grid - Authors, Series, Characters, Tags on same level */}
            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-8 mb-8">
                 {/* Authors */}
-                <InfoSection icon={PenTool} title="Authors">
+                <InfoSection icon={PenTool} title="作者">
                     {data.tags.authors?.map(author => (
                         <Chip key={author} label={author} variant="default" />
                     ))}
                 </InfoSection>
 
                 {/* Series */}
-                <InfoSection icon={Library} title="Series">
+                <InfoSection icon={Library} title="系列">
                     {data.series && (
                         <Chip label={data.series} variant="primary" />
                     )}
@@ -174,14 +174,14 @@ export const MangaCard: React.FC<MangaCardProps> = ({ data, onStartReading, onBa
                 </InfoSection>
 
                 {/* Characters */}
-                <InfoSection icon={Users} title="Characters">
+                <InfoSection icon={Users} title="角色">
                     {data.tags.characters?.map(c => (
                         <Chip key={c} label={c} variant="outline" />
                     ))}
                 </InfoSection>
 
                 {/* Tags */}
-                <InfoSection icon={Tag} title="Tags">
+                <InfoSection icon={Tag} title="标签">
                     {data.tags.general?.map(t => (
                         <Chip key={t} label={t} variant="default" />
                     ))}
@@ -192,7 +192,7 @@ export const MangaCard: React.FC<MangaCardProps> = ({ data, onStartReading, onBa
            <div className="prose prose-sm max-w-none pt-6 border-t border-border-subtle">
               <div className="flex items-center gap-2 mb-2">
                  <BookOpen className="w-4 h-4 text-gray-400" />
-                 <h3 className="text-sm font-bold text-gray-900">Synopsis</h3>
+                 <h3 className="text-sm font-bold text-gray-900">简介</h3>
               </div>
               <div className="relative">
                   <p className={`text-gray-600 text-[15px] leading-relaxed transition-all duration-300 ${!isDescriptionExpanded ? 'line-clamp-3 md:line-clamp-4 mask-fade-bottom' : ''}`}>
@@ -206,7 +206,7 @@ export const MangaCard: React.FC<MangaCardProps> = ({ data, onStartReading, onBa
                 onClick={() => setIsDescriptionExpanded(!isDescriptionExpanded)} 
                 className="mt-2 text-xs font-bold text-primary hover:text-primary-hover uppercase tracking-wide flex items-center gap-1 group focus:outline-none"
               >
-                {isDescriptionExpanded ? 'Show Less' : 'Read Full Synopsis'}
+                {isDescriptionExpanded ? '收起' : '阅读完整简介'}
                 <span className={`transition-transform duration-200 ${isDescriptionExpanded ? 'rotate-180' : ''}`}>▼</span>
               </button>
            </div>

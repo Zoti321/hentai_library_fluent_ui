@@ -113,14 +113,14 @@ export const Reader: React.FC<ReaderProps> = ({ manga, chapter, onBack, onNextCh
                     <div className="p-12 pb-32 flex flex-col items-center gap-6 text-center text-gray-500">
                         <div className="w-16 h-1 bg-gray-800 rounded-full mb-4" />
                         <div>
-                            <p className="text-xs font-bold uppercase tracking-widest mb-2 opacity-60">End of Chapter</p>
+                            <p className="text-xs font-bold uppercase tracking-widest mb-2 opacity-60">本章结束</p>
                             <h3 className="text-xl font-semibold text-white">{chapter.title}</h3>
                         </div>
                         <button 
                             onClick={(e) => { e.stopPropagation(); onNextChapter(); }} 
                             className="mt-4 px-8 py-3 rounded-full bg-white text-black font-semibold hover:scale-105 transition-transform active:scale-95"
                         >
-                            Next Chapter
+                            下一章
                         </button>
                     </div>
                 </div>
@@ -170,27 +170,27 @@ export const Reader: React.FC<ReaderProps> = ({ manga, chapter, onBack, onNextCh
                 onClick={(e) => e.stopPropagation()}
             >
                 <div className="flex items-center justify-between mb-4">
-                    <span className="text-xs font-bold text-white/40 uppercase tracking-widest">Reading Settings</span>
+                    <span className="text-xs font-bold text-white/40 uppercase tracking-widest">阅读设置</span>
                     <button onClick={() => setSettingsOpen(false)} className="p-1 hover:bg-white/10 rounded-full"><X className="w-4 h-4 text-white/60"/></button>
                 </div>
                 
                 <div className="space-y-4">
                     <div>
-                        <label className="text-sm text-white/80 font-medium mb-2 block">Direction</label>
+                        <label className="text-sm text-white/80 font-medium mb-2 block">方向</label>
                         <div className="grid grid-cols-2 gap-2">
                              <button 
                                 onClick={() => setReadMode('horizontal')} 
                                 className={`flex flex-col items-center gap-2 p-3 rounded-xl border transition-all ${readMode === 'horizontal' ? 'bg-white/10 border-white/20 text-white' : 'border-transparent text-white/40 hover:bg-white/5'}`}
                              >
                                 <ImageIcon className="w-6 h-6" />
-                                <span className="text-xs font-medium">Page</span>
+                                <span className="text-xs font-medium">分页</span>
                              </button>
                              <button 
                                 onClick={() => setReadMode('vertical')} 
                                 className={`flex flex-col items-center gap-2 p-3 rounded-xl border transition-all ${readMode === 'vertical' ? 'bg-white/10 border-white/20 text-white' : 'border-transparent text-white/40 hover:bg-white/5'}`}
                              >
                                 <AlignJustify className="w-6 h-6 rotate-90" />
-                                <span className="text-xs font-medium">Webtoon</span>
+                                <span className="text-xs font-medium">条漫</span>
                              </button>
                         </div>
                     </div>
@@ -230,11 +230,11 @@ export const Reader: React.FC<ReaderProps> = ({ manga, chapter, onBack, onNextCh
             {/* Navigation Buttons Island */}
             <div className="flex items-center gap-3 pointer-events-auto">
                  <button onClick={onPrevChapter} className="p-3 pl-4 pr-5 rounded-full bg-zinc-900/80 backdrop-blur-xl border border-white/10 hover:bg-white/10 active:scale-95 transition-all flex items-center gap-2 text-sm font-medium">
-                    <ChevronLeft className="w-4 h-4" /> Prev
+                    <ChevronLeft className="w-4 h-4" /> 上一页
                  </button>
                  <div className="h-1 w-1 rounded-full bg-white/20"></div>
                  <button onClick={onNextChapter} className="p-3 pl-5 pr-4 rounded-full bg-white text-black border border-white hover:bg-gray-200 active:scale-95 transition-all flex items-center gap-2 text-sm font-semibold shadow-lg shadow-white/10">
-                    Next <ChevronRight className="w-4 h-4" />
+                    下一页 <ChevronRight className="w-4 h-4" />
                  </button>
             </div>
         </div>

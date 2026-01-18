@@ -13,8 +13,8 @@ export const ChapterList: React.FC<ChapterListProps> = ({ chapters, onChapterSel
   return (
     <div className="mt-8">
       <div className="flex items-center justify-between mb-4 px-1">
-        <h3 className="text-lg font-semibold text-gray-900">Chapters</h3>
-        <span className="text-xs font-medium text-gray-500 bg-gray-100 px-2 py-1 rounded-md">{chapters.length} Total</span>
+        <h3 className="text-lg font-semibold text-gray-900">章节列表</h3>
+        <span className="text-xs font-medium text-gray-500 bg-gray-100 px-2 py-1 rounded-md">共 {chapters.length} 章</span>
       </div>
       
       <div className="bg-white border border-border-subtle rounded-lg shadow-fluent divide-y divide-gray-100 overflow-hidden">
@@ -43,7 +43,7 @@ export const ChapterList: React.FC<ChapterListProps> = ({ chapters, onChapterSel
 
             {!chapter.read && (
                 <div className="px-3 py-1 rounded text-xs font-medium text-primary bg-primary/10 opacity-0 group-hover:opacity-100 transition-opacity">
-                    Read
+                    已读
                 </div>
             )}
           </button>

@@ -39,14 +39,14 @@ const NavButton: React.FC<{
 
 export const Navigation: React.FC<NavigationProps> = ({ activeTab, onTabChange, isR18Mode, onToggleR18 }) => {
   const navItems = [
-    { id: 'home', label: 'Home', icon: Home },
-    { id: 'library', label: 'Library', icon: Library },
-    { id: 'browse', label: 'Folders', icon: Folder }, 
-    { id: 'read', label: 'History', icon: History }, 
+    { id: 'home', label: '首页', icon: Home },
+    { id: 'library', label: '书库', icon: Library },
+    { id: 'browse', label: '文件夹', icon: Folder }, 
+    { id: 'read', label: '历史', icon: History }, 
   ];
   const bottomItems = [
-    { id: 'import', label: 'Import', icon: FolderOpen },
-    { id: 'settings', label: 'Settings', icon: Settings },
+    { id: 'import', label: '导入', icon: FolderOpen },
+    { id: 'settings', label: '设置', icon: Settings },
   ];
 
   return (
@@ -57,12 +57,12 @@ export const Navigation: React.FC<NavigationProps> = ({ activeTab, onTabChange, 
             <span className="font-semibold text-lg tracking-tight text-gray-900">MangaLibrary</span>
         </div>
         <div className="flex-1 flex flex-col gap-1 w-full">
-          <div className="px-4 mb-2 text-xs font-semibold text-gray-500 uppercase tracking-wider">Menu</div>
+          <div className="px-4 mb-2 text-xs font-semibold text-gray-500 uppercase tracking-wider">菜单</div>
           {navItems.map((item) => <NavButton key={item.id} id={item.id} label={item.label} icon={item.icon} isActive={activeTab === item.id} onClick={() => onTabChange(item.id)} />)}
         </div>
         <div className="mt-auto flex flex-col gap-1">
-             <div className="px-4 mb-2 text-xs font-semibold text-gray-500 uppercase tracking-wider">System</div>
-             {onToggleR18 && <NavButton id="r18" label={isR18Mode ? "R18 Visible" : "R18 Hidden"} icon={isR18Mode ? ShieldAlert : Lock} isActive={!!isR18Mode} isToggle={true} isDestructive={!!isR18Mode} onClick={() => onToggleR18(!isR18Mode)} />}
+             <div className="px-4 mb-2 text-xs font-semibold text-gray-500 uppercase tracking-wider">系统</div>
+             {onToggleR18 && <NavButton id="r18" label={isR18Mode ? "显示 R18" : "隐藏 R18"} icon={isR18Mode ? ShieldAlert : Lock} isActive={!!isR18Mode} isToggle={true} isDestructive={!!isR18Mode} onClick={() => onToggleR18(!isR18Mode)} />}
              {bottomItems.map((item) => <NavButton key={item.id} id={item.id} label={item.label} icon={item.icon} isActive={activeTab === item.id} onClick={() => onTabChange(item.id)} />)}
         </div>
       </nav>

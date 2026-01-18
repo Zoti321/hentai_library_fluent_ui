@@ -42,23 +42,23 @@ export const ContextMenu: React.FC<{ x: number; y: number; manga: MangaData | nu
             </div>
 
             {/* Primary Actions */}
-            <MenuItem icon={BookOpen} label="Read" onClick={() => onAction('read')} shortcut="Enter" />
-            <MenuItem icon={Info} label="View Details" onClick={() => onAction('detail')} />
+            <MenuItem icon={BookOpen} label="阅读" onClick={() => onAction('read')} shortcut="Enter" />
+            <MenuItem icon={Info} label="查看详情" onClick={() => onAction('detail')} />
             
             <MenuDivider />
             
             {/* Management */}
-            <MenuItem icon={Edit} label="Edit Metadata" onClick={() => onAction('edit')} />
-            <MenuItem icon={Layers} label="Merge" onClick={() => onAction('merge')} />
+            <MenuItem icon={Edit} label="编辑元数据" onClick={() => onAction('edit')} />
+            <MenuItem icon={Layers} label="合并" onClick={() => onAction('merge')} />
             
             <MenuDivider />
 
-            <MenuItem icon={ExternalLink} label="Open in Folder" onClick={() => onAction('open_folder')} />
+            <MenuItem icon={ExternalLink} label="在文件夹中打开" onClick={() => onAction('open_folder')} />
             
             <MenuDivider />
             
             {/* Destructive */}
-            <MenuItem icon={Trash2} label="Delete" variant="destructive" onClick={() => onAction('delete')} shortcut="Del" />
+            <MenuItem icon={Trash2} label="删除" variant="destructive" onClick={() => onAction('delete')} shortcut="Del" />
         </div>
     </div>
   );

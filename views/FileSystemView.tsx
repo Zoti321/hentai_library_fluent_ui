@@ -7,10 +7,10 @@ export const FileSystemView: React.FC = () => {
 
     // Mock Data (flattened for easier selection logic)
     const items = [
-        { id: 'folder-1', name: 'Downloads', type: 'folder', size: 'Folder' },
-        { id: 'folder-2', name: 'Comics', type: 'folder', size: 'Folder' },
-        { id: 'folder-3', name: 'SD Card', type: 'folder', size: 'Folder' },
-        { id: 'folder-4', name: 'Archive', type: 'folder', size: 'Folder' },
+        { id: 'folder-1', name: 'Downloads', type: 'folder', size: '文件夹' },
+        { id: 'folder-2', name: 'Comics', type: 'folder', size: '文件夹' },
+        { id: 'folder-3', name: 'SD Card', type: 'folder', size: '文件夹' },
+        { id: 'folder-4', name: 'Archive', type: 'folder', size: '文件夹' },
         { id: 'file-1', name: 'Scan_Log_1.txt', type: 'file', size: '12 KB' },
         { id: 'file-2', name: 'Scan_Log_2.txt', type: 'file', size: '8 KB' },
         { id: 'file-3', name: 'Scan_Log_3.txt', type: 'file', size: '12 KB' },
@@ -41,8 +41,8 @@ export const FileSystemView: React.FC = () => {
         <div className="w-full max-w-5xl mx-auto animate-in fade-in slide-in-from-bottom-2 duration-500 relative h-full flex flex-col">
             <header className="mb-8 flex items-center justify-between shrink-0">
                 <div>
-                    <h1 className="text-2xl font-semibold text-gray-900">File Explorer</h1>
-                    <p className="text-gray-500 text-sm mt-1">Browse and import from local storage</p>
+                    <h1 className="text-2xl font-semibold text-gray-900">文件浏览器</h1>
+                    <p className="text-gray-500 text-sm mt-1">浏览并导入本地存储</p>
                 </div>
                 <div className="flex gap-2">
                      <button 
@@ -50,17 +50,17 @@ export const FileSystemView: React.FC = () => {
                         className={`flex items-center gap-2 px-4 py-2 rounded-md font-medium text-sm transition-all active:scale-95 ${isSelectionMode ? 'bg-gray-200 text-gray-900' : 'bg-white border border-border-subtle text-gray-700 hover:bg-gray-50'}`}
                      >
                         {isSelectionMode ? <X className="w-4 h-4" /> : <CheckSquare className="w-4 h-4" />}
-                        <span>{isSelectionMode ? 'Cancel' : 'Select'}</span>
+                        <span>{isSelectionMode ? '取消' : '选择'}</span>
                      </button>
                      <button className="flex items-center gap-2 bg-primary text-white px-4 py-2 rounded-md font-medium text-sm hover:bg-primary-hover shadow-sm transition-all active:scale-95">
-                        <Plus className="w-4 h-4" /><span>Add Folder</span>
+                        <Plus className="w-4 h-4" /><span>添加文件夹</span>
                      </button>
                 </div>
             </header>
 
             <div className="bg-white rounded-xl border border-border-subtle shadow-sm overflow-hidden flex-1 flex flex-col min-h-0">
                 <div className="p-3 border-b border-border-subtle bg-gray-50 flex items-center gap-2 text-sm text-gray-600 shrink-0">
-                    <HomeIcon className="w-4 h-4" /><span>/</span><span className="font-medium text-gray-900">Local Storage</span>
+                    <HomeIcon className="w-4 h-4" /><span>/</span><span className="font-medium text-gray-900">本地存储</span>
                 </div>
                 <div className="divide-y divide-gray-100 overflow-y-auto">
                     {items.map((item) => {
@@ -100,10 +100,10 @@ export const FileSystemView: React.FC = () => {
                         <div className="flex items-center gap-4">
                             <div className="flex items-center gap-2 text-sm font-semibold text-gray-900">
                                  <div className="bg-primary text-white text-xs w-6 h-6 flex items-center justify-center rounded-full font-bold">{selectedItems.size}</div>
-                                 <span className="hidden sm:inline">Selected</span>
+                                 <span className="hidden sm:inline">已选</span>
                             </div>
                             <button onClick={handleSelectAll} className="text-xs font-medium text-primary hover:underline">
-                                {selectedItems.size === items.length ? 'Deselect All' : 'Select All'}
+                                {selectedItems.size === items.length ? '取消全选' : '全选'}
                             </button>
                         </div>
 
@@ -114,7 +114,7 @@ export const FileSystemView: React.FC = () => {
                                 onClick={() => handleBatchAction('Import')} 
                                 disabled={selectedItems.size === 0}
                                 className="p-2 rounded-lg text-gray-600 hover:bg-gray-100 hover:text-primary transition-colors disabled:opacity-50 disabled:cursor-not-allowed" 
-                                title="Import Selected"
+                                title="导入选中"
                              >
                                 <Import className="w-5 h-5" />
                              </button>
@@ -122,7 +122,7 @@ export const FileSystemView: React.FC = () => {
                                 onClick={() => handleBatchAction('Scan')} 
                                 disabled={selectedItems.size === 0}
                                 className="p-2 rounded-lg text-gray-600 hover:bg-gray-100 hover:text-primary transition-colors disabled:opacity-50 disabled:cursor-not-allowed" 
-                                title="Scan for Media"
+                                title="扫描媒体"
                              >
                                 <FileCheck className="w-5 h-5" />
                              </button>
@@ -131,7 +131,7 @@ export const FileSystemView: React.FC = () => {
                                 onClick={() => handleBatchAction('Delete')} 
                                 disabled={selectedItems.size === 0}
                                 className="p-2 rounded-lg text-gray-600 hover:bg-red-50 hover:text-red-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed" 
-                                title="Delete"
+                                title="删除"
                              >
                                 <Trash2 className="w-5 h-5" />
                              </button>
