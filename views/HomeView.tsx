@@ -17,7 +17,7 @@ export const HomeView: React.FC<HomeViewProps> = ({ library, onMangaClick, onSta
     
     return (
       <div className="w-full max-w-7xl mx-auto animate-in fade-in slide-in-from-bottom-2 duration-500">
-        <header className="mb-8 flex items-end justify-between">
+        <header className="mb-8 flex flex-col md:flex-row md:items-end justify-between gap-4">
             <div>
                 <h1 className="text-3xl font-semibold text-gray-900 tracking-tight">首页</h1>
                 <p className="text-gray-500 text-sm mt-1">下午好，读者</p>

@@ -2,8 +2,11 @@ import React from 'react';
 import { MangaData } from '../types';
 
 export const HistoryView: React.FC<{ history: MangaData[] }> = ({ history }) => (
-    <div className="w-full max-w-4xl mx-auto animate-in fade-in slide-in-from-bottom-2 duration-500">
-        <h1 className="text-2xl font-semibold text-gray-900 mb-6">历史记录</h1>
+    <div className="w-full max-w-4xl mx-auto pt-4 animate-in fade-in slide-in-from-bottom-2 duration-500">
+        <header className="mb-6">
+             <h1 className="text-2xl font-semibold text-gray-900">历史记录</h1>
+        </header>
+
         <div className="space-y-6">
             <div className="space-y-2">
                 <h3 className="text-sm font-semibold text-gray-500">今天</h3>

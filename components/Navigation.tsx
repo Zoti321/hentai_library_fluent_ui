@@ -20,7 +20,7 @@ const NavButton: React.FC<{
     <button
       onClick={onClick}
       className={`
-        relative w-full flex items-center gap-3 px-4 py-2.5 rounded-md text-sm group select-none
+        relative w-full flex items-center gap-3 px-4 py-2.5 rounded-md text-sm group select-none outline-none focus-visible:ring-2 focus-visible:ring-primary/50
         ${isActive 
           ? 'bg-white shadow-fluent text-gray-900 font-medium transition-all duration-200 ease-out' 
           : 'text-gray-600 hover:bg-black/5 hover:text-gray-900 transition-none'
@@ -51,26 +51,29 @@ export const Navigation: React.FC<NavigationProps> = ({ activeTab, onTabChange, 
 
   return (
     <>
-      <nav className="hidden md:flex flex-col w-64 shrink-0 bg-surface-alt h-full border-r border-border-subtle pt-8 pb-4 px-2 z-20 transition-colors duration-300">
-        <div className="px-4 mb-8 flex items-center gap-3">
+      {/* Desktop Sidebar: Added sticky and h-screen to prevent it from scrolling away */}
+      <nav className="hidden md:flex flex-col w-64 shrink-0 bg-surface-alt border-r border-border-subtle pt-8 pb-4 px-2 z-30 transition-colors duration-300 sticky top-0 h-screen overflow-y-auto custom-scrollbar">
+        <div className="px-4 mb-8 flex items-center gap-3 select-none shrink-0">
             <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center text-white font-semibold text-sm shadow-sm transition-colors duration-300">M</div>
             <span className="font-semibold text-lg tracking-tight text-gray-900">MangaLibrary</span>
         </div>
-        <div className="flex-1 flex flex-col gap-1 w-full">
-          <div className="px-4 mb-2 text-xs font-semibold text-gray-500 uppercase tracking-wider">菜单</div>
+        <div className="flex-1 flex flex-col gap-1 w-full min-h-0">
+          <div className="px-4 mb-2 text-xs font-semibold text-gray-500 uppercase tracking-wider shrink-0">菜单</div>
           {navItems.map((item) => <NavButton key={item.id} id={item.id} label={item.label} icon={item.icon} isActive={activeTab === item.id} onClick={() => onTabChange(item.id)} />)}
         </div>
-        <div className="mt-auto flex flex-col gap-1">
+        <div className="mt-auto flex flex-col gap-1 shrink-0 pt-4">
              <div className="px-4 mb-2 text-xs font-semibold text-gray-500 uppercase tracking-wider">系统</div>
              {onToggleR18 && <NavButton id="r18" label={isR18Mode ? "显示 R18" : "隐藏 R18"} icon={isR18Mode ? ShieldAlert : Lock} isActive={!!isR18Mode} isToggle={true} isDestructive={!!isR18Mode} onClick={() => onToggleR18(!isR18Mode)} />}
              {bottomItems.map((item) => <NavButton key={item.id} id={item.id} label={item.label} icon={item.icon} isActive={activeTab === item.id} onClick={() => onTabChange(item.id)} />)}
         </div>
       </nav>
+
+      {/* Mobile Bottom Bar */}
       <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-surface/90 backdrop-blur-xl border-t border-border-subtle py-1 px-2 flex justify-around items-center z-50 pb-safe transition-colors duration-300">
         {[...navItems, bottomItems[1]].map((item) => {
             const Icon = item.icon;
             return (
-                <button key={item.id} onClick={() => onTabChange(item.id)} className={`flex flex-col items-center justify-center gap-1 p-2 rounded-lg flex-1 transition-all ${activeTab === item.id ? 'text-primary' : 'text-gray-500'}`}>
+                <button key={item.id} onClick={() => onTabChange(item.id)} className={`flex flex-col items-center justify-center gap-1 p-2 rounded-lg flex-1 transition-all active:scale-90 ${activeTab === item.id ? 'text-primary' : 'text-gray-500'}`}>
                 <div className={`p-1 rounded-md transition-colors ${activeTab === item.id ? 'bg-primary/10' : ''}`}><Icon className="w-5 h-5" /></div>
                 <span className="text-[10px] font-medium">{item.label}</span>
                 </button>

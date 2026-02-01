@@ -38,8 +38,8 @@ export const FileSystemView: React.FC = () => {
     };
 
     return (
-        <div className="w-full max-w-5xl mx-auto animate-in fade-in slide-in-from-bottom-2 duration-500 relative h-full flex flex-col">
-            <header className="mb-8 flex items-center justify-between shrink-0">
+        <div className="w-full max-w-5xl mx-auto h-full flex flex-col pt-4 animate-in fade-in slide-in-from-bottom-2 duration-500">
+            <header className="mb-6 flex items-center justify-between shrink-0">
                 <div>
                     <h1 className="text-2xl font-semibold text-gray-900">文件浏览器</h1>
                     <p className="text-gray-500 text-sm mt-1">浏览并导入本地存储</p>
@@ -58,7 +58,7 @@ export const FileSystemView: React.FC = () => {
                 </div>
             </header>
 
-            <div className="bg-white rounded-xl border border-border-subtle shadow-sm overflow-hidden flex-1 flex flex-col min-h-0">
+            <div className="bg-white rounded-xl border border-border-subtle shadow-sm overflow-hidden flex-1 flex flex-col min-h-0 mb-6">
                 <div className="p-3 border-b border-border-subtle bg-gray-50 flex items-center gap-2 text-sm text-gray-600 shrink-0">
                     <HomeIcon className="w-4 h-4" /><span>/</span><span className="font-medium text-gray-900">本地存储</span>
                 </div>

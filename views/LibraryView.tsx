@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { Search, RotateCw, Filter, ArrowDownWideNarrow, ArrowUp, ArrowDown, LayoutGrid, List, Import, FileCheck, Trash2, X, BookOpen, Layers, ChevronDown, CheckSquare, Square } from 'lucide-react';
+import { Search, RotateCw, Filter, ArrowDownWideNarrow, ArrowUp, ArrowDown, LayoutGrid, List, Import, FileCheck, Trash2, X, BookOpen, Layers, ChevronDown, CheckSquare, Square, ArrowUpDown } from 'lucide-react';
 import { MangaData } from '../types';
 import { MangaGridItem, ViewMode } from '../components/MangaGridItem';
 
@@ -22,6 +22,57 @@ interface LibraryViewProps {
     isRefreshing: boolean;
     onMergeRequest: (items: MangaData[]) => void;
 }
+
+const SortOption = ({ active, label, onClick }: { active: boolean, label: string, onClick: () => void }) => (
+    <button 
+        onClick={(e) => { e.stopPropagation(); onClick(); }}
+        className={`
+            relative flex-1 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 border text-center select-none
+            ${active 
+                ? 'bg-primary text-white border-primary shadow-md shadow-primary/25 scale-[1.02] z-10' 
+                : 'bg-white text-gray-600 border-gray-200 hover:border-gray-300 hover:bg-gray-50'
+            }
+        `}
+    >
+        {label}
+    </button>
+);
+
+const SortSection = ({ 
+    title, 
+    rule, 
+    onFieldChange, 
+    onDirectionChange 
+}: { 
+    title: string, 
+    rule: SortRule, 
+    onFieldChange: (f: SortField) => void, 
+    onDirectionChange: () => void 
+}) => (
+    <div className="space-y-3">
+        <div className="flex items-center justify-between px-1">
+            <span className="text-xs font-bold text-gray-400 uppercase tracking-wider">{title}</span>
+            <button 
+                onClick={(e) => { e.stopPropagation(); onDirectionChange(); }} 
+                className={`
+                    flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-medium transition-all border
+                    ${rule.direction === 'asc' 
+                        ? 'bg-blue-50 text-blue-600 border-blue-100 hover:bg-blue-100' 
+                        : 'bg-orange-50 text-orange-600 border-orange-100 hover:bg-orange-100'
+                    }
+                `}
+            >
+                {rule.direction === 'asc' ? <ArrowUp className="w-3 h-3" /> : <ArrowDown className="w-3 h-3" />}
+                <span>{rule.direction === 'asc' ? '升序' : '降序'}</span>
+            </button>
+        </div>
+        <div className="grid grid-cols-3 gap-2">
+            <SortOption active={rule.field === 'title'} label="标题" onClick={() => onFieldChange('title')} />
+            <SortOption active={rule.field === 'dateAdded'} label="日期" onClick={() => onFieldChange('dateAdded')} />
+            <SortOption active={rule.field === 'rating'} label="评分" onClick={() => onFieldChange('rating')} />
+        </div>
+    </div>
+);
 
 export const LibraryView: React.FC<LibraryViewProps> = ({ 
     library, isR18Mode, onMangaClick, onStartReading, onContextMenu, onRefresh, isRefreshing, onMergeRequest 
@@ -270,72 +321,36 @@ export const LibraryView: React.FC<LibraryViewProps> = ({
                                 <>
                                     <div className="fixed inset-0 z-40" onClick={() => setIsSortMenuOpen(false)} />
                                     <div className="absolute right-0 top-full mt-2 w-80 bg-white rounded-xl shadow-flyout border border-border-subtle p-5 z-50 animate-in fade-in zoom-in-95 origin-top-right cursor-default">
-                                        <div className="flex items-center justify-between mb-4">
-                                            <h3 className="text-sm font-semibold text-gray-900">排序方式</h3>
-                                            <button onClick={() => setIsSortMenuOpen(false)} className="text-gray-400 hover:text-gray-600"><X className="w-4 h-4"/></button>
-                                        </div>
-                                        
-                                        <div className="space-y-4">
-                                            {/* Primary Sort */}
-                                            <div className="bg-gray-50/50 p-3 rounded-lg border border-border-subtle">
-                                                <div className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">主要规则</div>
-                                                <div className="flex gap-2">
-                                                    <div className="relative flex-1">
-                                                        <select 
-                                                            value={sortRules[0].field} 
-                                                            onChange={(e) => updateSortRule(0, 'field', e.target.value as SortField)} 
-                                                            className="w-full appearance-none bg-white border border-border-strong rounded-md pl-3 pr-8 py-2 text-sm focus:border-primary focus:ring-1 focus:ring-primary/20 outline-none cursor-pointer transition-all hover:border-gray-400"
-                                                        >
-                                                            <option value="title">标题</option>
-                                                            <option value="dateAdded">添加日期</option>
-                                                            <option value="rating">评分</option>
-                                                        </select>
-                                                        <ChevronDown className="absolute right-2.5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
-                                                    </div>
-                                                    <button 
-                                                        onClick={() => updateSortRule(0, 'direction', sortRules[0].direction === 'asc' ? 'desc' : 'asc')} 
-                                                        className="flex items-center justify-center w-10 bg-white border border-border-strong rounded-md text-gray-600 hover:text-primary hover:border-primary hover:bg-primary/5 transition-all"
-                                                        title={sortRules[0].direction === 'asc' ? "升序" : "降序"}
-                                                    >
-                                                        {sortRules[0].direction === 'asc' ? <ArrowUp className="w-4 h-4"/> : <ArrowDown className="w-4 h-4"/>}
-                                                    </button>
-                                                </div>
+                                        <div className="flex items-center justify-between mb-5">
+                                            <div className="flex items-center gap-2">
+                                                <ArrowUpDown className="w-4 h-4 text-primary" />
+                                                <h3 className="text-sm font-semibold text-gray-900">排序与视图</h3>
                                             </div>
-
-                                            {/* Secondary Sort */}
-                                            <div className="bg-gray-50/50 p-3 rounded-lg border border-border-subtle">
-                                                <div className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">次要规则</div>
-                                                <div className="flex gap-2">
-                                                    <div className="relative flex-1">
-                                                        <select 
-                                                            value={sortRules[1].field} 
-                                                            onChange={(e) => updateSortRule(1, 'field', e.target.value as SortField)} 
-                                                            className="w-full appearance-none bg-white border border-border-strong rounded-md pl-3 pr-8 py-2 text-sm focus:border-primary focus:ring-1 focus:ring-primary/20 outline-none cursor-pointer transition-all hover:border-gray-400"
-                                                        >
-                                                            <option value="title">标题</option>
-                                                            <option value="dateAdded">添加日期</option>
-                                                            <option value="rating">评分</option>
-                                                        </select>
-                                                        <ChevronDown className="absolute right-2.5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
-                                                    </div>
-                                                    <button 
-                                                        onClick={() => updateSortRule(1, 'direction', sortRules[1].direction === 'asc' ? 'desc' : 'asc')} 
-                                                        className="flex items-center justify-center w-10 bg-white border border-border-strong rounded-md text-gray-600 hover:text-primary hover:border-primary hover:bg-primary/5 transition-all"
-                                                        title={sortRules[1].direction === 'asc' ? "升序" : "降序"}
-                                                    >
-                                                        {sortRules[1].direction === 'asc' ? <ArrowUp className="w-4 h-4"/> : <ArrowDown className="w-4 h-4"/>}
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        
-                                        <div className="mt-4 pt-4 border-t border-gray-100 flex justify-end">
+                                            
                                             <button 
                                                 onClick={() => { setSortRules([{ field: 'dateAdded', direction: 'desc' }, { field: 'title', direction: 'asc' }]); setIsSortMenuOpen(false); }}
-                                                className="text-xs text-gray-500 hover:text-primary hover:underline"
+                                                className="text-xs font-medium text-gray-400 hover:text-primary transition-colors bg-gray-50 px-2 py-1 rounded-md"
                                             >
-                                                重置默认
+                                                重置
                                             </button>
+                                        </div>
+                                        
+                                        <div className="space-y-6">
+                                            <SortSection 
+                                                title="主要规则" 
+                                                rule={sortRules[0]} 
+                                                onFieldChange={(f) => updateSortRule(0, 'field', f)}
+                                                onDirectionChange={() => updateSortRule(0, 'direction', sortRules[0].direction === 'asc' ? 'desc' : 'asc')}
+                                            />
+                                            
+                                            <div className="h-px bg-gray-100 -mx-2" />
+
+                                            <SortSection 
+                                                title="次要规则" 
+                                                rule={sortRules[1]} 
+                                                onFieldChange={(f) => updateSortRule(1, 'field', f)}
+                                                onDirectionChange={() => updateSortRule(1, 'direction', sortRules[1].direction === 'asc' ? 'desc' : 'asc')}
+                                            />
                                         </div>
                                     </div>
                                 </>
