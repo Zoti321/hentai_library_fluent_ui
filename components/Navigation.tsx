@@ -1,11 +1,9 @@
 import React from 'react';
-import { Home, FolderOpen, Settings, Folder, History, Library, Lock, ShieldAlert } from 'lucide-react';
+import { Home, FolderOpen, Settings, Folder, History, Library } from 'lucide-react';
 
 interface NavigationProps {
   activeTab: string;
   onTabChange: (tab: string) => void;
-  isR18Mode?: boolean;
-  onToggleR18?: (enabled: boolean) => void;
 }
 
 const NavButton: React.FC<{ 
@@ -22,7 +20,7 @@ const NavButton: React.FC<{
       className={`
         relative w-full flex items-center gap-3 px-4 py-2.5 rounded-md text-sm group select-none outline-none focus-visible:ring-2 focus-visible:ring-primary/50
         ${isActive 
-          ? 'bg-white shadow-fluent text-gray-900 font-medium transition-all duration-200 ease-out' 
+          ? 'bg-white shadow-sm ring-1 ring-border-subtle text-gray-900 font-medium transition-all duration-200 ease-out' 
           : 'text-gray-600 hover:bg-black/5 hover:text-gray-900 transition-none'
         }
         ${isDestructive && !isActive ? 'hover:text-red-600 hover:bg-red-50' : ''}
@@ -37,7 +35,7 @@ const NavButton: React.FC<{
     </button>
   );
 
-export const Navigation: React.FC<NavigationProps> = ({ activeTab, onTabChange, isR18Mode, onToggleR18 }) => {
+export const Navigation: React.FC<NavigationProps> = ({ activeTab, onTabChange }) => {
   const navItems = [
     { id: 'home', label: '首页', icon: Home },
     { id: 'library', label: '书库', icon: Library },
@@ -51,8 +49,8 @@ export const Navigation: React.FC<NavigationProps> = ({ activeTab, onTabChange, 
 
   return (
     <>
-      {/* Desktop Sidebar: Added sticky and h-screen to prevent it from scrolling away */}
-      <nav className="hidden md:flex flex-col w-64 shrink-0 bg-surface-alt border-r border-border-subtle pt-8 pb-4 px-2 z-30 transition-colors duration-300 sticky top-0 h-screen overflow-y-auto custom-scrollbar">
+      {/* Desktop Sidebar: Changed bg to gray-50 to separate from white main content */}
+      <nav className="hidden md:flex flex-col w-64 shrink-0 bg-gray-50 border-r border-border-subtle pt-8 pb-4 px-2 z-30 transition-colors duration-300 sticky top-0 h-screen overflow-y-auto custom-scrollbar">
         <div className="px-4 mb-8 flex items-center gap-3 select-none shrink-0">
             <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center text-white font-semibold text-sm shadow-sm transition-colors duration-300">M</div>
             <span className="font-semibold text-lg tracking-tight text-gray-900">MangaLibrary</span>
@@ -63,13 +61,12 @@ export const Navigation: React.FC<NavigationProps> = ({ activeTab, onTabChange, 
         </div>
         <div className="mt-auto flex flex-col gap-1 shrink-0 pt-4">
              <div className="px-4 mb-2 text-xs font-semibold text-gray-500 uppercase tracking-wider">系统</div>
-             {onToggleR18 && <NavButton id="r18" label={isR18Mode ? "显示 R18" : "隐藏 R18"} icon={isR18Mode ? ShieldAlert : Lock} isActive={!!isR18Mode} isToggle={true} isDestructive={!!isR18Mode} onClick={() => onToggleR18(!isR18Mode)} />}
              {bottomItems.map((item) => <NavButton key={item.id} id={item.id} label={item.label} icon={item.icon} isActive={activeTab === item.id} onClick={() => onTabChange(item.id)} />)}
         </div>
       </nav>
 
       {/* Mobile Bottom Bar */}
-      <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-surface/90 backdrop-blur-xl border-t border-border-subtle py-1 px-2 flex justify-around items-center z-50 pb-safe transition-colors duration-300">
+      <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-white/90 backdrop-blur-xl border-t border-border-subtle py-1 px-2 flex justify-around items-center z-50 pb-safe transition-colors duration-300 shadow-[0_-1px_3px_rgba(0,0,0,0.05)]">
         {[...navItems, bottomItems[1]].map((item) => {
             const Icon = item.icon;
             return (

@@ -1,6 +1,6 @@
 import React from 'react';
 import { RotateCw, Plus, FileText, ChevronRight } from 'lucide-react';
-import { MangaData } from '../types';
+import { MangaData, LayoutDensity } from '../types';
 import { MangaGridItem } from '../components/MangaGridItem';
 
 interface HomeViewProps {
@@ -10,9 +10,10 @@ interface HomeViewProps {
     onContextMenu: (e: React.MouseEvent, manga: MangaData) => void;
     onRefresh: () => void;
     isRefreshing: boolean;
+    layoutDensity?: LayoutDensity;
 }
 
-export const HomeView: React.FC<HomeViewProps> = ({ library, onMangaClick, onStartReading, onContextMenu, onRefresh, isRefreshing }) => {
+export const HomeView: React.FC<HomeViewProps> = ({ library, onMangaClick, onStartReading, onContextMenu, onRefresh, isRefreshing, layoutDensity }) => {
     const continueReadingList = library.filter(m => m.status === 'Reading').slice(0, 4);
     
     return (
@@ -82,7 +83,7 @@ export const HomeView: React.FC<HomeViewProps> = ({ library, onMangaClick, onSta
             <h2 className="font-semibold text-lg text-gray-900 mb-4">最近添加</h2>
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
                 {library.slice(0, 6).map(manga => (
-                    <MangaGridItem key={manga.id} manga={manga} onClick={onMangaClick} onStartReading={onStartReading} onContextMenu={onContextMenu} viewMode="grid" />
+                    <MangaGridItem key={manga.id} manga={manga} onClick={onMangaClick} onStartReading={onStartReading} onContextMenu={onContextMenu} viewMode="grid" layoutDensity={layoutDensity} />
                 ))}
             </div>
         </section>

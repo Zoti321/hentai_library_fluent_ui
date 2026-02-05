@@ -9,19 +9,19 @@
     <style>
       :root {
         /* --- Logic Layer: Light Mode Defaults --- */
-        --bg-app: #f3f3f3;          /* surface-alt */
-        --bg-card: #ffffff;         /* white */
-        --bg-subtle: #f9fafb;       /* gray-50 */
-        --bg-subtle-hover: #f3f4f6; /* gray-100 */
+        --bg-app: #ffffff;          /* Changed to White */
+        --bg-card: #ffffff;         /* White */
+        --bg-subtle: #f4f4f5;       /* Zinc-100 */
+        --bg-subtle-hover: #e4e4e7; /* Zinc-200 */
         
         /* Borders */
-        --border-color: #e5e7eb;    /* gray-200 */
-        --border-strong: #d1d5db;   /* gray-300 */
+        --border-color: #e4e4e7;    /* Zinc-200 - Slightly darker for white-on-white contrast */
+        --border-strong: #d4d4d8;   /* Zinc-300 */
         
         /* Text */
-        --text-main: #111827;       /* gray-900 */
-        --text-secondary: #374151;  /* gray-700 */
-        --text-muted: #6b7280;      /* gray-500 */
+        --text-main: #09090b;       /* Zinc-950 - Sharp Black */
+        --text-secondary: #52525b;  /* Zinc-600 */
+        --text-muted: #71717a;      /* Zinc-500 */
         
         /* Theme: Fluent (Blue) - Default Light Mode */
         --color-primary: #005FB8;
@@ -38,19 +38,19 @@
       /* --- Logic Layer: Dark Mode Overrides --- */
       html.dark {
         /* Backgrounds */
-        --bg-app: #09090b;          /* Very dark gray/black */
-        --bg-card: #18181b;         /* Dark gray card */
-        --bg-subtle: #27272a;       /* Slightly lighter for inputs */
-        --bg-subtle-hover: #3f3f46; 
+        --bg-app: #09090b;          /* Zinc-950 */
+        --bg-card: #18181b;         /* Zinc-900 */
+        --bg-subtle: #27272a;       /* Zinc-800 */
+        --bg-subtle-hover: #3f3f46; /* Zinc-700 */
         
         /* Borders */
         --border-color: #27272a;    
         --border-strong: #3f3f46;   
         
         /* Text - Inverted */
-        --text-main: #f9fafb;       /* White-ish */
-        --text-secondary: #d1d5db;  /* Light gray */
-        --text-muted: #9ca3af;      /* Medium gray */
+        --text-main: #f9fafb;       /* Zinc-50 */
+        --text-secondary: #a1a1aa;  /* Zinc-400 */
+        --text-muted: #71717a;      /* Zinc-500 */
 
         /* Theme: Fluent (Blue) - Dark Mode Optimized */
         --color-primary: #4cc2ff; 
@@ -106,9 +106,9 @@
             },
             borderRadius: { sm: 'var(--radius-sm)', md: 'var(--radius-md)', lg: 'var(--radius-lg)', xl: 'var(--radius-xl)' },
             boxShadow: {
-              'fluent': '0 2px 4px rgba(0,0,0,0.04), 0 0 1px rgba(0,0,0,0.1)',
-              'fluent-hover': '0 4px 12px rgba(0,0,0,0.08), 0 0 1px rgba(0,0,0,0.1)',
-              'flyout': '0 8px 16px rgba(0,0,0,0.14)',
+              'fluent': '0 1px 2px rgba(0,0,0,0.06), 0 1px 3px rgba(0,0,0,0.1)',
+              'fluent-hover': '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
+              'flyout': '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05), 0 0 0 1px rgba(0,0,0,0.05)',
             }
           }
         }

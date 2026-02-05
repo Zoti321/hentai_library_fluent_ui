@@ -14,6 +14,8 @@ export interface Chapter {
   size?: string;
 }
 
+export type LayoutDensity = 'comfortable' | 'compact';
+
 export interface MangaData {
   id: string;
   title: string;

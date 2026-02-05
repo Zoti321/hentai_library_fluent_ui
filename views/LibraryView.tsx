@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import { Search, RotateCw, Filter, ArrowDownWideNarrow, ArrowUp, ArrowDown, LayoutGrid, List, Import, FileCheck, Trash2, X, BookOpen, Layers, ChevronDown, CheckSquare, Square, ArrowUpDown } from 'lucide-react';
-import { MangaData } from '../types';
+import { MangaData, LayoutDensity } from '../types';
 import { MangaGridItem, ViewMode } from '../components/MangaGridItem';
 
 type SortField = 'title' | 'dateAdded' | 'rating';
@@ -21,6 +21,7 @@ interface LibraryViewProps {
     onRefresh: () => void;
     isRefreshing: boolean;
     onMergeRequest: (items: MangaData[]) => void;
+    layoutDensity: LayoutDensity;
 }
 
 const SortOption = ({ active, label, onClick }: { active: boolean, label: string, onClick: () => void }) => (
@@ -75,7 +76,7 @@ const SortSection = ({
 );
 
 export const LibraryView: React.FC<LibraryViewProps> = ({ 
-    library, isR18Mode, onMangaClick, onStartReading, onContextMenu, onRefresh, isRefreshing, onMergeRequest 
+    library, isR18Mode, onMangaClick, onStartReading, onContextMenu, onRefresh, isRefreshing, onMergeRequest, layoutDensity 
 }) => {
     const [searchQuery, setSearchQuery] = useState('');
     
@@ -93,6 +94,8 @@ export const LibraryView: React.FC<LibraryViewProps> = ({
     // Batch Selection State
     const [isSelectionMode, setIsSelectionMode] = useState(false);
     const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
+
+    const isCompact = layoutDensity === 'compact';
 
     const filteredData = useMemo(() => {
         let data = isR18Mode ? [...library] : library.filter(manga => !manga.tags.general.includes('R18'));
@@ -371,7 +374,7 @@ export const LibraryView: React.FC<LibraryViewProps> = ({
            </div>
         </header>
         <div className="flex-1 pb-24 md:pb-4">
-            <div className={viewMode === 'grid' ? "grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-4" : "flex flex-col gap-2"}>
+            <div className={viewMode === 'grid' ? `grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 ${isCompact ? 'gap-2' : 'gap-4'}` : "flex flex-col gap-2"}>
                 {filteredData.map((manga) => (
                     <MangaGridItem 
                         key={manga.id} 
@@ -383,6 +386,7 @@ export const LibraryView: React.FC<LibraryViewProps> = ({
                         isSelectionMode={isSelectionMode}
                         isSelected={selectedIds.has(manga.id)}
                         onToggleSelect={handleToggleSelect}
+                        layoutDensity={layoutDensity}
                     />
                 ))}
             </div>

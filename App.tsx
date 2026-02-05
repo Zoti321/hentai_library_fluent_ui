@@ -12,11 +12,10 @@ import { HomeView } from './views/HomeView';
 import { LibraryView } from './views/LibraryView';
 import { FileSystemView } from './views/FileSystemView';
 import { HistoryView } from './views/HistoryView';
-import { MangaData, Chapter } from './types';
+import { MangaData, Chapter, LayoutDensity } from './types';
 import { libraryData } from './mockData';
 
 type ViewState = 'home' | 'library' | 'detail' | 'reader' | 'settings' | 'browse' | 'read';
-type Theme = 'fluent' | 'pink';
 
 const App: React.FC = () => {
   const [currentView, setCurrentView] = useState<ViewState>('home');
@@ -25,8 +24,8 @@ const App: React.FC = () => {
   const [activeTab, setActiveTab] = useState('home');
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isR18Mode, setIsR18Mode] = useState(false);
-  const [theme, setTheme] = useState<Theme>('fluent'); 
   const [isDarkMode, setIsDarkMode] = useState(false);
+  const [layoutDensity, setLayoutDensity] = useState<LayoutDensity>('comfortable');
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [contextMenu, setContextMenu] = useState<{x: number, y: number, manga: MangaData} | null>(null);
 
@@ -36,7 +35,6 @@ const App: React.FC = () => {
   const [isAddChapterModalOpen, setIsAddChapterModalOpen] = useState(false);
   const [mergeCandidates, setMergeCandidates] = useState<MangaData[]>([]);
 
-  useEffect(() => { if (theme === 'pink') document.body.classList.add('theme-pink'); else document.body.classList.remove('theme-pink'); }, [theme]);
   useEffect(() => { if (isDarkMode) document.documentElement.classList.add('dark'); else document.documentElement.classList.remove('dark'); }, [isDarkMode]);
 
   const filteredLibraryData = useMemo(() => isR18Mode ? library : library.filter(manga => !manga.tags.general.includes('R18')), [isR18Mode, library]);
@@ -109,7 +107,7 @@ const App: React.FC = () => {
   };
 
   const DetailView = () => (
-    <div className="w-full max-w-5xl mx-auto animate-in fade-in slide-in-from-bottom-4 duration-500">{selectedManga && (<><MangaCard data={selectedManga} onBack={handleBackToLibrary} onStartReading={() => handleStartReading(selectedManga)} onEdit={() => setIsEditModalOpen(true)} onAddChapter={() => setIsAddChapterModalOpen(true)} /><ChapterList chapters={selectedManga.chapters} onChapterSelect={(ch) => { setCurrentChapter(ch); setCurrentView('reader'); }} /></>)}</div>
+    <div className="w-full max-w-5xl mx-auto animate-in fade-in slide-in-from-bottom-4 duration-500">{selectedManga && (<><MangaCard data={selectedManga} onBack={handleBackToLibrary} onStartReading={() => handleStartReading(selectedManga)} onEdit={() => setIsEditModalOpen(true)} onAddChapter={() => setIsAddChapterModalOpen(true)} /><ChapterList chapters={selectedManga.chapters} onChapterSelect={(ch) => { setCurrentChapter(ch); setCurrentView('reader'); }} layoutDensity={layoutDensity} /></>)}</div>
   );
 
   if (currentView === 'reader' && selectedManga && currentChapter) return <Reader manga={selectedManga} chapter={currentChapter} onBack={() => { setCurrentView('detail'); setCurrentChapter(null); }} onNextChapter={() => console.log("Next")} onPrevChapter={() => console.log("Prev")} />;
@@ -120,14 +118,14 @@ const App: React.FC = () => {
       <AddChapterSourceModal isOpen={isAddChapterModalOpen} onClose={() => setIsAddChapterModalOpen(false)} currentManga={selectedManga} library={library} onConfirm={handleAddChapterConfirm} />
       <EditMetadataModal isOpen={isEditModalOpen} onClose={() => setIsEditModalOpen(false)} manga={selectedManga} />
       {contextMenu && <ContextMenu x={contextMenu.x} y={contextMenu.y} manga={contextMenu.manga} onClose={() => setContextMenu(null)} onAction={handleContextAction} />}
-      <Navigation activeTab={activeTab} onTabChange={handleTabChange} isR18Mode={isR18Mode} onToggleR18={setIsR18Mode} />
+      <Navigation activeTab={activeTab} onTabChange={handleTabChange} />
       <main className="flex-1 p-4 md:p-6 lg:p-8 pb-24 md:pb-8 max-w-full overflow-x-hidden">
-        {currentView === 'home' && <HomeView library={filteredLibraryData} onMangaClick={handleMangaClick} onStartReading={handleStartReading} onContextMenu={handleContextMenu} onRefresh={handleRefresh} isRefreshing={isRefreshing} />}
-        {currentView === 'library' && <LibraryView library={library} isR18Mode={isR18Mode} onMangaClick={handleMangaClick} onStartReading={handleStartReading} onContextMenu={handleContextMenu} onRefresh={handleRefresh} isRefreshing={isRefreshing} onMergeRequest={handleMergeRequest} />}
+        {currentView === 'home' && <HomeView library={filteredLibraryData} onMangaClick={handleMangaClick} onStartReading={handleStartReading} onContextMenu={handleContextMenu} onRefresh={handleRefresh} isRefreshing={isRefreshing} layoutDensity={layoutDensity} />}
+        {currentView === 'library' && <LibraryView library={library} isR18Mode={isR18Mode} onMangaClick={handleMangaClick} onStartReading={handleStartReading} onContextMenu={handleContextMenu} onRefresh={handleRefresh} isRefreshing={isRefreshing} onMergeRequest={handleMergeRequest} layoutDensity={layoutDensity} />}
         {currentView === 'browse' && <FileSystemView />}
         {currentView === 'read' && <HistoryView history={filteredLibraryData} />}
         {currentView === 'detail' && <DetailView />}
-        {currentView === 'settings' && <SettingsPage isR18Mode={isR18Mode} onToggleR18={setIsR18Mode} theme={theme} onThemeChange={setTheme} isDarkMode={isDarkMode} onToggleDarkMode={() => setIsDarkMode(!isDarkMode)} />}
+        {currentView === 'settings' && <SettingsPage isR18Mode={isR18Mode} onToggleR18={setIsR18Mode} isDarkMode={isDarkMode} onToggleDarkMode={() => setIsDarkMode(!isDarkMode)} layoutDensity={layoutDensity} onLayoutDensityChange={setLayoutDensity} />}
       </main>
     </div>
   );

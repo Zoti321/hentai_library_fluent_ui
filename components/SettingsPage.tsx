@@ -1,5 +1,6 @@
 import React from 'react';
-import { Moon, Smartphone, Trash2, ChevronRight, Globe, Info, Monitor, Palette, HardDrive, RefreshCw, FolderSearch, ShieldAlert, Lock, Database, Layout, PaintBucket } from 'lucide-react';
+import { Moon, Smartphone, Trash2, ChevronRight, Globe, Info, Monitor, Palette, HardDrive, RefreshCw, FolderSearch, ShieldAlert, Lock, Database, Layout } from 'lucide-react';
+import { LayoutDensity } from '../types';
 
 const SettingsGroup: React.FC<{ title: string; children: React.ReactNode }> = ({ title, children }) => (
   <div className="mb-6">
@@ -36,21 +37,40 @@ const Toggle: React.FC<{ checked?: boolean; onChange?: () => void }> = ({ checke
 interface SettingsPageProps {
   isR18Mode: boolean;
   onToggleR18: (enabled: boolean) => void;
-  theme?: 'fluent' | 'pink';
-  onThemeChange?: (theme: 'fluent' | 'pink') => void;
   isDarkMode?: boolean;
   onToggleDarkMode?: () => void;
+  layoutDensity: LayoutDensity;
+  onLayoutDensityChange: (density: LayoutDensity) => void;
 }
 
-export const SettingsPage: React.FC<SettingsPageProps> = ({ isR18Mode, onToggleR18, theme, onThemeChange, isDarkMode, onToggleDarkMode }) => {
+export const SettingsPage: React.FC<SettingsPageProps> = ({ isR18Mode, onToggleR18, isDarkMode, onToggleDarkMode, layoutDensity, onLayoutDensityChange }) => {
   return (
     <div className="w-full max-w-2xl mx-auto animate-in fade-in slide-in-from-bottom-2 duration-300 py-4">
       <header className="mb-8"><h1 className="text-2xl font-semibold text-gray-900">设置</h1></header>
       <SettingsGroup title="个性化">
-         <SettingsRow icon={<PaintBucket className="w-5 h-5" />} label="主题风格" description={theme === 'pink' ? 'Material 粉' : 'Fluent 蓝'} action={<button onClick={() => onThemeChange?.(theme === 'pink' ? 'fluent' : 'pink')} className="flex items-center gap-2 bg-gray-100 hover:bg-gray-200 px-3 py-1.5 rounded text-xs font-medium text-gray-700 transition-colors">切换至 {theme === 'pink' ? 'Fluent' : 'Material'}</button>} />
          <SettingsRow icon={<Moon className="w-5 h-5" />} label="深色模式" description={isDarkMode ? "已启用" : "已禁用"} action={<Toggle checked={isDarkMode} onChange={onToggleDarkMode} />} />
          <SettingsRow icon={<Palette className="w-5 h-5" />} label="应用主题" description="跟随系统" action={<div className="flex items-center gap-2 text-sm text-gray-500">浅色 <ChevronRight className="w-4 h-4"/></div>} />
-         <SettingsRow icon={<Layout className="w-5 h-5" />} label="布局密度" description="紧凑" action={<ChevronRight className="w-4 h-4 text-gray-400"/>} />
+         <SettingsRow 
+            icon={<Layout className="w-5 h-5" />} 
+            label="布局密度" 
+            description={layoutDensity === 'comfortable' ? '舒适' : '紧凑'} 
+            action={
+                <div className="flex items-center bg-gray-100 rounded-lg p-1 border border-border-subtle">
+                    <button 
+                        onClick={(e) => { e.stopPropagation(); onLayoutDensityChange('comfortable'); }} 
+                        className={`px-3 py-1 rounded-md text-xs font-medium transition-all ${layoutDensity === 'comfortable' ? 'bg-white text-gray-900 shadow-sm' : 'text-gray-500 hover:text-gray-700'}`}
+                    >
+                        舒适
+                    </button>
+                    <button 
+                        onClick={(e) => { e.stopPropagation(); onLayoutDensityChange('compact'); }} 
+                        className={`px-3 py-1 rounded-md text-xs font-medium transition-all ${layoutDensity === 'compact' ? 'bg-white text-gray-900 shadow-sm' : 'text-gray-500 hover:text-gray-700'}`}
+                    >
+                        紧凑
+                    </button>
+                </div>
+            } 
+         />
       </SettingsGroup>
       <SettingsGroup title="书库">
          <SettingsRow icon={<FolderSearch className="w-5 h-5" />} label="库位置" description="管理扫描文件夹" action={<ChevronRight className="w-4 h-4 text-gray-400"/>} />
@@ -62,7 +82,7 @@ export const SettingsPage: React.FC<SettingsPageProps> = ({ isR18Mode, onToggleR
          <SettingsRow icon={<Trash2 className="w-5 h-5" />} label="清理" description="移除已删除文件的缩略图" action={<ChevronRight className="w-4 h-4 text-gray-400"/>} />
       </SettingsGroup>
       <SettingsGroup title="关于">
-         <SettingsRow icon={<Info className="w-5 h-5" />} label="版本" description="v2.1.0 (动态主题)" action={<span className="text-xs bg-gray-100 text-gray-500 px-2 py-1 rounded font-mono">检查更新</span>} />
+         <SettingsRow icon={<Info className="w-5 h-5" />} label="版本" description="v2.1.0" action={<span className="text-xs bg-gray-100 text-gray-500 px-2 py-1 rounded font-mono">检查更新</span>} />
       </SettingsGroup>
     </div>
   );

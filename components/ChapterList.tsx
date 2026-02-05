@@ -1,14 +1,17 @@
 import React from 'react';
-import { Chapter } from '../types';
+import { Chapter, LayoutDensity } from '../types';
 import { Check, Clock, Eye, FileText } from 'lucide-react';
 
 interface ChapterListProps {
   chapters?: Chapter[];
   onChapterSelect: (chapter: Chapter) => void;
+  layoutDensity?: LayoutDensity;
 }
 
-export const ChapterList: React.FC<ChapterListProps> = ({ chapters, onChapterSelect }) => {
+export const ChapterList: React.FC<ChapterListProps> = ({ chapters, onChapterSelect, layoutDensity = 'comfortable' }) => {
   if (!chapters || chapters.length === 0) return null;
+
+  const isCompact = layoutDensity === 'compact';
 
   return (
     <div className="mt-8">
@@ -22,18 +25,18 @@ export const ChapterList: React.FC<ChapterListProps> = ({ chapters, onChapterSel
           <button
             key={chapter.id}
             onClick={() => onChapterSelect(chapter)}
-            className="w-full flex items-center gap-4 p-4 hover:bg-gray-50 transition-colors text-left group"
+            className={`w-full flex items-center gap-4 hover:bg-gray-50 transition-colors text-left group ${isCompact ? 'p-2' : 'p-4'}`}
           >
-            <div className={`shrink-0 w-8 h-8 rounded-full flex items-center justify-center border transition-colors duration-300 ${
+            <div className={`shrink-0 rounded-full flex items-center justify-center border transition-colors duration-300 ${isCompact ? 'w-6 h-6' : 'w-8 h-8'} ${
                 chapter.read 
                 ? 'bg-gray-100 border-gray-200 text-gray-400' 
                 : 'bg-primary/10 border-primary/20 text-primary'
             }`}>
-               {chapter.read ? <Check className="w-4 h-4" /> : <FileText className="w-4 h-4" />}
+               {chapter.read ? <Check className={isCompact ? 'w-3 h-3' : 'w-4 h-4'} /> : <FileText className={isCompact ? 'w-3 h-3' : 'w-4 h-4'} />}
             </div>
             
             <div className="flex-1 min-w-0">
-              <div className={`font-medium text-sm ${chapter.read ? 'text-gray-500' : 'text-gray-900'}`}>
+              <div className={`font-medium ${isCompact ? 'text-xs' : 'text-sm'} ${chapter.read ? 'text-gray-500' : 'text-gray-900'}`}>
                 {chapter.title}
               </div>
               <div className="text-xs text-gray-400 mt-0.5 font-mono">
