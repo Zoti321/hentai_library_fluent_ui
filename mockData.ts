@@ -1,4 +1,4 @@
-import { MangaData } from './types';
+import { MangaData, ComicImageSourceType } from './types';
 
 const generateChapters = (count: number, prefix: string) => {
   return Array.from({ length: count }, (_, i) => ({
@@ -11,11 +11,11 @@ const generateChapters = (count: number, prefix: string) => {
   })).reverse();
 };
 
-export const libraryData: MangaData[] = [
+const fixedLibraryData: MangaData[] = [
   {
     id: '1',
     title: 'Sakura Blooming Days',
-    description: 'In a world where magic is fueled by emotions, a young girl discovers her power lies not in strength, but in empathy. As she navigates the prestigious academy, she uncovers dark secrets about the origin of magic itself.',
+    description: 'In a world where magic is fueled by emotions, a young girl discovers her power lies not in strength, but in empathy.',
     coverUrl: 'https://picsum.photos/400/600?random=1',
     fileSize: '1.2 GB',
     format: 'CBZ',
@@ -24,6 +24,8 @@ export const libraryData: MangaData[] = [
     dateAdded: '2023-01-15',
     series: 'Chronicles of the Heart',
     status: 'Reading',
+    publicationStatus: '已完结',
+    imageSourceType: 'Local',
     lastOpened: '2 hours ago',
     tags: {
       authors: ['Aiko Tanaka', 'Studio Bloom'],
@@ -36,7 +38,7 @@ export const libraryData: MangaData[] = [
   {
     id: '2',
     title: 'Cyberpunk Drifter',
-    description: 'Neon lights hide the darkest shadows. A former mercenary takes on one last job to clear his debt, only to find himself protecting a sentient AI that everyone wants to destroy.',
+    description: 'Neon lights hide the darkest shadows. A former mercenary takes on one last job.',
     coverUrl: 'https://picsum.photos/400/600?random=2',
     fileSize: '850 MB',
     format: 'ZIP',
@@ -45,6 +47,8 @@ export const libraryData: MangaData[] = [
     dateAdded: '2023-02-10',
     series: 'Neon Shadows',
     status: 'Plan to Read',
+    publicationStatus: '连载中',
+    imageSourceType: 'Network',
     tags: {
       authors: ['Kenji Sato'],
       characters: ['Kaito', 'Unit-734'],
@@ -56,7 +60,7 @@ export const libraryData: MangaData[] = [
   {
     id: '3',
     title: 'The Silent Forest',
-    description: 'A horror anthology centered around a mysterious forest where people go missing, only to return changed.',
+    description: 'A horror anthology centered around a mysterious forest where people go missing.',
     coverUrl: 'https://picsum.photos/400/600?random=3',
     fileSize: '2.1 GB',
     format: 'PDF',
@@ -64,6 +68,8 @@ export const libraryData: MangaData[] = [
     rating: 4.9,
     dateAdded: '2023-03-05',
     status: 'Completed',
+    publicationStatus: '已完结',
+    imageSourceType: 'Local',
     tags: {
       authors: ['Junji Ito Inspired'],
       characters: ['The Forest'],
@@ -75,7 +81,7 @@ export const libraryData: MangaData[] = [
   {
     id: '4',
     title: 'Azure Blue Skies',
-    description: 'A relaxing slice-of-life story about a retired pilot opening a coffee shop near the coast. The gentle sound of waves and the aroma of coffee creates a perfect haven.',
+    description: 'A relaxing slice-of-life story about a retired pilot opening a coffee shop.',
     coverUrl: 'https://picsum.photos/400/600?random=4',
     fileSize: '450 MB',
     format: 'CBZ',
@@ -83,6 +89,8 @@ export const libraryData: MangaData[] = [
     rating: 4.2,
     dateAdded: '2023-04-01',
     status: 'Reading',
+    publicationStatus: '连载中',
+    imageSourceType: 'Cloud',
     tags: {
       authors: ['Mika Yamata'],
       characters: ['Captain Joe', 'Sarah'],
@@ -94,7 +102,7 @@ export const libraryData: MangaData[] = [
   {
     id: '5',
     title: 'Velvet Chains',
-    description: 'Late nights at the office lead to unexpected developments between a strict boss and his new secretary. A tale of power dynamics and hidden desires.',
+    description: 'Late nights at the office lead to unexpected developments.',
     coverUrl: 'https://picsum.photos/400/600?random=5',
     fileSize: '320 MB',
     format: 'ZIP',
@@ -102,6 +110,8 @@ export const libraryData: MangaData[] = [
     rating: 4.6,
     dateAdded: '2023-04-10',
     status: 'Completed',
+    publicationStatus: '已完结',
+    imageSourceType: 'Local',
     tags: {
       authors: ['Crimson Pen'],
       characters: ['Mr. Tanaka', 'Yumi'],
@@ -113,7 +123,7 @@ export const libraryData: MangaData[] = [
   {
     id: '6',
     title: 'Mecha Soul: Override',
-    description: 'In a post-apocalyptic wasteland, humanity survives in giant moving cities. A scavenger finds an ancient mecha that could change everything.',
+    description: 'In a post-apocalyptic wasteland, humanity survives in giant moving cities.',
     coverUrl: 'https://picsum.photos/400/600?random=6',
     fileSize: '2.5 GB',
     format: 'FOLDER',
@@ -122,6 +132,8 @@ export const libraryData: MangaData[] = [
     dateAdded: '2023-05-15',
     series: 'Mecha Soul',
     status: 'Reading',
+    publicationStatus: '连载中',
+    imageSourceType: 'Network',
     tags: {
       authors: ['Goro Mecha'],
       characters: ['Shin', 'Unit-01'],
@@ -133,7 +145,7 @@ export const libraryData: MangaData[] = [
   {
     id: '7',
     title: 'Summer Lessons',
-    description: 'A private tutor spends the summer teaching three sisters at a secluded villa, but learns more about love and temptation than academics.',
+    description: 'A private tutor spends the summer teaching three sisters at a secluded villa.',
     coverUrl: 'https://picsum.photos/400/600?random=7',
     fileSize: '600 MB',
     format: 'CBZ',
@@ -141,6 +153,8 @@ export const libraryData: MangaData[] = [
     rating: 4.4,
     dateAdded: '2023-06-01',
     status: 'Plan to Read',
+    publicationStatus: '已完结',
+    imageSourceType: 'Cloud',
     tags: {
       authors: ['Artist X'],
       characters: ['Sensei', 'The Sisters'],
@@ -152,7 +166,7 @@ export const libraryData: MangaData[] = [
   {
     id: '8',
     title: 'The Wandering Swordsman',
-    description: 'A ronin travels the countryside during the Edo period, solving problems with his blade and his wit. An epic historical drama.',
+    description: 'A ronin travels the countryside during the Edo period.',
     coverUrl: 'https://picsum.photos/400/600?random=8',
     fileSize: '1.8 GB',
     format: 'PDF',
@@ -161,6 +175,8 @@ export const libraryData: MangaData[] = [
     dateAdded: '2023-06-20',
     series: 'Edo Tales',
     status: 'Completed',
+    publicationStatus: '已完结',
+    imageSourceType: 'Local',
     tags: {
       authors: ['Takeshi Obata Inspired'],
       characters: ['Musashi'],
@@ -172,7 +188,7 @@ export const libraryData: MangaData[] = [
   {
     id: '9',
     title: 'Dungeon Meshi: The Aftermath',
-    description: 'Fan comics exploring what happens after the main party returns to the surface. A delightful mix of cooking and monster hunting.',
+    description: 'Fan comics exploring what happens after the main party returns to the surface.',
     coverUrl: 'https://picsum.photos/400/600?random=9',
     fileSize: '200 MB',
     format: 'ZIP',
@@ -180,6 +196,8 @@ export const libraryData: MangaData[] = [
     rating: 4.1,
     dateAdded: '2023-07-04',
     status: 'Reading',
+    publicationStatus: '连载中',
+    imageSourceType: 'Network',
     tags: {
       authors: ['Circle A'],
       characters: ['Laios', 'Marcille'],
@@ -191,7 +209,7 @@ export const libraryData: MangaData[] = [
   {
     id: '10',
     title: 'Midnight Shift',
-    description: 'Strange things happen in the hospital ward at night. A psychological thriller with supernatural elements and adult themes.',
+    description: 'Strange things happen in the hospital ward at night.',
     coverUrl: 'https://picsum.photos/400/600?random=10',
     fileSize: '400 MB',
     format: 'CBZ',
@@ -199,6 +217,8 @@ export const libraryData: MangaData[] = [
     rating: 4.3,
     dateAdded: '2023-07-15',
     status: 'Plan to Read',
+    publicationStatus: '已完结',
+    imageSourceType: 'Local',
     tags: {
       authors: ['Dark Artist'],
       characters: ['Nurse Joy'],
@@ -206,43 +226,74 @@ export const libraryData: MangaData[] = [
       series: ['One-shot']
     },
     chapters: generateChapters(1, '10')
-  },
-  {
-    id: '11',
-    title: 'Space Truckers',
-    description: 'Delivering cargo across the galaxy isn\'t as glamorous as it sounds, especially when pirates are involved. High-octane sci-fi adventure.',
-    coverUrl: 'https://picsum.photos/400/600?random=11',
-    fileSize: '1.1 GB',
-    format: 'CBZ',
-    path: '/Internal/Comics/SciFi/Truckers',
-    rating: 4.0,
-    dateAdded: '2023-08-01',
-    status: 'Reading',
-    tags: {
-      authors: ['SciFi Weekly'],
-      characters: ['Trucker Joe'],
-      general: ['Sci-Fi', 'Comedy', 'Adventure'],
-      series: ['Ongoing']
-    },
-    chapters: generateChapters(8, '11')
-  },
-  {
-    id: '12',
-    title: 'The Idol\'s Secret',
-    description: 'Behind the glitz and glamour, an idol struggles with a stalker and finds solace in her bodyguard. Intense drama and romance.',
-    coverUrl: 'https://picsum.photos/400/600?random=12',
-    fileSize: '900 MB',
-    format: 'ZIP',
-    path: '/Internal/Comics/Adult/Idol',
-    rating: 4.5,
-    dateAdded: '2023-08-10',
-    status: 'Completed',
-    tags: {
-      authors: ['Pop Culture'],
-      characters: ['Mina', 'Guard'],
-      general: ['Drama', 'Romance', 'R18', 'Music'],
-      series: ['Limited Series']
-    },
-    chapters: generateChapters(4, '12')
   }
+];
+
+// --- Generation Logic for 100+ Items ---
+const adjectives = ['Silent', 'Holy', 'Broken', 'Eternal', 'Crimson', 'Azure', 'Dark', 'Light', 'Lost', 'Fallen', 'Rising', 'Hidden', 'Secret', 'Mystic', 'Crystal', 'Iron', 'Golden', 'Silver', 'Forgotten', 'Forbidden', 'Shattered', 'Infinite', 'Divine', 'Cursed', 'Bleeding', 'Frozen', 'Burning', 'Twisted', 'Sacred', 'Phantom'];
+const nouns = ['Sword', 'Blade', 'Soul', 'Heart', 'World', 'Sky', 'Ocean', 'Forest', 'City', 'Tower', 'Legend', 'Chronicle', 'Saga', 'Dream', 'Nightmare', 'Empire', 'Kingdom', 'Warrior', 'Mage', 'Dragon', 'Angel', 'Demon', 'Ghost', 'Machine', 'System', 'Gate', 'Abyss', 'Horizon', 'Memory', 'Tear'];
+const genres = ['Fantasy', 'Action', 'Adventure', 'Romance', 'Sci-Fi', 'Slice of Life', 'Comedy', 'Drama', 'Horror', 'Mystery', 'Psychological', 'Sports', 'Supernatural', 'Thriller', 'Harem', 'Isekai', 'Mecha'];
+const authors = ['Akira Toriyama', 'Eiichiro Oda', 'Masashi Kishimoto', 'Tite Kubo', 'Hirohiko Araki', 'Kentaro Miura', 'Yoshihiro Togashi', 'Junji Ito', 'Rumiko Takahashi', 'Clamp', 'One', 'Yusuke Murata', 'Naoki Urasawa', 'Inio Asano', 'Makoto Shinkai', 'Hayao Miyazaki'];
+const statuses: ('Reading' | 'Completed' | 'Plan to Read')[] = ['Reading', 'Completed', 'Plan to Read'];
+const pubStatuses: ('连载中' | '已完结')[] = ['连载中', '已完结'];
+const formats: ('CBZ' | 'ZIP' | 'PDF' | 'FOLDER')[] = ['CBZ', 'ZIP', 'PDF', 'FOLDER'];
+
+const generateMoreManga = (startIndex: number, count: number): MangaData[] => {
+  return Array.from({ length: count }, (_, i) => {
+    const id = (startIndex + i).toString();
+    const titleAdjective = adjectives[Math.floor(Math.random() * adjectives.length)];
+    const titleNoun = nouns[Math.floor(Math.random() * nouns.length)];
+    const title = `The ${titleAdjective} ${titleNoun}`;
+    
+    const chapterCount = Math.floor(Math.random() * 50) + 1;
+    const rating = parseFloat((Math.random() * 2 + 3).toFixed(1)); // 3.0 to 5.0
+    
+    // Random Tags
+    const shuffledGenres = [...genres].sort(() => 0.5 - Math.random());
+    const selectedGenres = shuffledGenres.slice(0, Math.floor(Math.random() * 3) + 1);
+    if (Math.random() > 0.85) selectedGenres.push('R18');
+
+    const author = authors[Math.floor(Math.random() * authors.length)];
+    const status = Math.random() > 0.4 ? statuses[Math.floor(Math.random() * statuses.length)] : undefined;
+    
+    // Simulate some history
+    let lastOpened: string | undefined = undefined;
+    if (Math.random() > 0.7) {
+        const times = ['Just now', '5 mins ago', '1 hour ago', 'Yesterday', '2 days ago', 'Last week'];
+        lastOpened = times[Math.floor(Math.random() * times.length)];
+    }
+
+    // Random Date
+    const today = new Date();
+    const pastDate = new Date(today.getTime() - Math.floor(Math.random() * 10000000000));
+    const dateAdded = pastDate.toISOString().split('T')[0];
+
+    return {
+      id,
+      title,
+      description: `A story about the ${titleAdjective.toLowerCase()} ${titleNoun.toLowerCase()} that changes the world forever. This is a generated mock data entry #${id} designed to populate the library for testing purposes.`,
+      coverUrl: `https://picsum.photos/400/600?random=${id}`,
+      fileSize: `${(Math.random() * 500 + 50).toFixed(0)} MB`,
+      format: formats[Math.floor(Math.random() * formats.length)],
+      path: `/Internal/Comics/${selectedGenres[0]}/${titleNoun}`,
+      rating: rating,
+      dateAdded: dateAdded,
+      status: status,
+      publicationStatus: pubStatuses[Math.floor(Math.random() * pubStatuses.length)],
+      imageSourceType: 'Local',
+      lastOpened: lastOpened,
+      tags: {
+        authors: [author],
+        characters: ['Protagonist', 'Antagonist', 'Sidekick'],
+        general: selectedGenres,
+        series: Math.random() > 0.7 ? [`${titleAdjective} Series`] : []
+      },
+      chapters: generateChapters(chapterCount, id)
+    };
+  });
+};
+
+export const libraryData: MangaData[] = [
+    ...fixedLibraryData,
+    ...generateMoreManga(11, 90)
 ];

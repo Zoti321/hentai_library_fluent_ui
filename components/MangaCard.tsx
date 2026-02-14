@@ -154,8 +154,8 @@ export const MangaCard: React.FC<MangaCardProps> = ({ data, onStartReading, onBa
                 </div>
            )}
 
-           {/* 3. Unified Metadata Grid - Authors, Series, Characters, Tags on same level */}
-           <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-8 mb-8">
+           {/* 3. Unified Metadata Stack - Vertical Layout */}
+           <div className="flex flex-col gap-6 mb-8">
                 {/* Authors */}
                 <InfoSection icon={PenTool} title="作者">
                     {data.tags.authors?.map(author => (

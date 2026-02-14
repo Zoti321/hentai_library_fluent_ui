@@ -44,17 +44,29 @@ export const FileSystemView: React.FC = () => {
                     <h1 className="text-2xl font-semibold text-gray-900">文件浏览器</h1>
                     <p className="text-gray-500 text-sm mt-1">浏览并导入本地存储</p>
                 </div>
-                <div className="flex gap-2">
+                <div className="flex items-center gap-2">
                      <button 
                         onClick={() => { setIsSelectionMode(!isSelectionMode); setSelectedItems(new Set()); }}
-                        className={`flex items-center gap-2 px-4 py-2 rounded-md font-medium text-sm transition-all active:scale-95 ${isSelectionMode ? 'bg-gray-200 text-gray-900' : 'bg-white border border-border-subtle text-gray-700 hover:bg-gray-50'}`}
+                        className={`
+                            group flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 active:scale-95
+                            ${isSelectionMode 
+                                ? 'bg-primary text-white shadow-sm ring-1 ring-primary' 
+                                : 'bg-transparent text-gray-600 hover:bg-gray-100 hover:text-gray-900'
+                            }
+                        `}
                      >
                         {isSelectionMode ? <X className="w-4 h-4" /> : <CheckSquare className="w-4 h-4" />}
                         <span>{isSelectionMode ? '取消' : '选择'}</span>
                      </button>
-                     <button className="flex items-center gap-2 bg-primary text-white px-4 py-2 rounded-md font-medium text-sm hover:bg-primary-hover shadow-sm transition-all active:scale-95">
-                        <Plus className="w-4 h-4" /><span>添加文件夹</span>
-                     </button>
+                     
+                     {!isSelectionMode && (
+                        <>
+                            <div className="h-5 w-px bg-gray-200 mx-1" />
+                            <button className="flex items-center gap-2 bg-primary text-white px-4 py-2 rounded-lg font-medium text-sm hover:bg-primary-hover shadow-sm transition-all active:scale-95">
+                                <Plus className="w-4 h-4" /><span>新建文件夹</span>
+                            </button>
+                        </>
+                     )}
                 </div>
             </header>
 
@@ -71,18 +83,27 @@ export const FileSystemView: React.FC = () => {
                                 onClick={() => isSelectionMode ? toggleSelection(item.id) : null}
                                 className={`flex items-center gap-3 p-4 transition-colors group select-none ${isSelectionMode ? 'cursor-pointer' : 'cursor-pointer hover:bg-primary/5'} ${isSelected ? 'bg-primary/5' : ''}`}
                             >
-                                {isSelectionMode && (
-                                    <div className={`w-5 h-5 rounded border flex items-center justify-center transition-colors shrink-0 ${isSelected ? 'bg-primary border-primary' : 'border-gray-400 bg-white'}`}>
-                                        {isSelected && <Check className="w-3.5 h-3.5 text-white" />}
+                                {isSelectionMode ? (
+                                    <div className={`w-5 h-5 rounded border flex items-center justify-center transition-all duration-200 shrink-0 ${isSelected ? 'bg-primary border-primary' : 'border-gray-300 bg-white group-hover:border-gray-400'}`}>
+                                        <Check className={`w-3.5 h-3.5 text-white transition-transform ${isSelected ? 'scale-100' : 'scale-0'}`} />
+                                    </div>
+                                ) : (
+                                    <div className="w-5 h-5 flex items-center justify-center shrink-0">
+                                        {item.type === 'folder' ? (
+                                            <Folder className="w-5 h-5 text-yellow-500 fill-yellow-500" />
+                                        ) : (
+                                            <FileText className="w-5 h-5 text-gray-400" />
+                                        )}
                                     </div>
                                 )}
                                 
-                                {item.type === 'folder' ? (
-                                    <Folder className="w-5 h-5 text-yellow-500 fill-yellow-500 shrink-0" />
-                                ) : (
-                                    <FileText className="w-5 h-5 text-gray-400 shrink-0" />
+                                {isSelectionMode && item.type === 'folder' && (
+                                     <Folder className="w-5 h-5 text-yellow-500 fill-yellow-500 shrink-0 ml-1" />
                                 )}
-                                
+                                {isSelectionMode && item.type !== 'folder' && (
+                                     <FileText className="w-5 h-5 text-gray-400 shrink-0 ml-1" />
+                                )}
+
                                 <span className={`text-sm font-medium truncate ${isSelected ? 'text-primary' : 'text-gray-700 group-hover:text-primary'}`}>
                                     {item.name}
                                 </span>

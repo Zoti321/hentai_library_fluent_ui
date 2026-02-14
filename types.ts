@@ -16,6 +16,8 @@ export interface Chapter {
 
 export type LayoutDensity = 'comfortable' | 'compact';
 
+export type ComicImageSourceType = 'Local' | 'Network' | 'Cloud';
+
 export interface MangaData {
   id: string;
   title: string;
@@ -30,6 +32,8 @@ export interface MangaData {
   tags: MangaTags;
   chapters?: Chapter[];
   lastReadChapterId?: string;
-  status?: 'Reading' | 'Completed' | 'Plan to Read';
+  status?: 'Reading' | 'Completed' | 'Plan to Read'; // User reading status
+  publicationStatus?: '连载中' | '已完结'; // Publication status for filter
+  imageSourceType?: ComicImageSourceType; // For filter
   lastOpened?: string;
 }

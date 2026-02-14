@@ -1,5 +1,5 @@
-import React from 'react';
-import { Home, FolderOpen, Settings, Folder, History, Library } from 'lucide-react';
+import React, { useState } from 'react';
+import { Home, FolderOpen, Settings, Folder, History, Library, PanelLeftClose, PanelLeftOpen } from 'lucide-react';
 
 interface NavigationProps {
   activeTab: string;
@@ -14,28 +14,32 @@ const NavButton: React.FC<{
     isActive: boolean; 
     isToggle?: boolean;
     isDestructive?: boolean;
-  }> = ({ id, label, icon: Icon, onClick, isActive, isToggle = false, isDestructive = false }) => (
+    isCollapsed?: boolean;
+  }> = ({ id, label, icon: Icon, onClick, isActive, isToggle = false, isDestructive = false, isCollapsed = false }) => (
     <button
       onClick={onClick}
+      title={isCollapsed ? label : undefined}
       className={`
-        relative w-full flex items-center gap-3 px-4 py-2.5 rounded-md text-sm group select-none outline-none focus-visible:ring-2 focus-visible:ring-primary/50
+        relative w-full flex items-center ${isCollapsed ? 'justify-center' : 'gap-3 px-4'} py-2.5 rounded-md text-sm group select-none outline-none focus-visible:ring-2 focus-visible:ring-primary/50 transition-all duration-200
         ${isActive 
-          ? 'bg-white shadow-sm ring-1 ring-border-subtle text-gray-900 font-medium transition-all duration-200 ease-out' 
-          : 'text-gray-600 hover:bg-black/5 hover:text-gray-900 transition-none'
+          ? 'bg-white shadow-sm ring-1 ring-border-subtle text-gray-900 font-medium' 
+          : 'text-gray-600 hover:bg-black/5 hover:text-gray-900'
         }
         ${isDestructive && !isActive ? 'hover:text-red-600 hover:bg-red-50' : ''}
         ${isDestructive && isActive ? 'text-red-600' : ''}
       `}
     >
-      {isActive && !isToggle && <div className="absolute left-1 top-2.5 bottom-2.5 w-1 bg-primary rounded-full animate-in fade-in zoom-in-75 duration-200" />}
+      {isActive && !isCollapsed && !isToggle && <div className="absolute left-1 top-2.5 bottom-2.5 w-1 bg-primary rounded-full animate-in fade-in zoom-in-75 duration-200" />}
       <div className={`transition-colors duration-200 ${isActive && !isDestructive ? 'text-primary' : (isDestructive ? 'text-current' : 'text-gray-500 group-hover:text-gray-900')}`}>
          <Icon className="w-5 h-5" />
       </div>
-      <span>{label}</span>
+      {!isCollapsed && <span className="truncate">{label}</span>}
     </button>
   );
 
 export const Navigation: React.FC<NavigationProps> = ({ activeTab, onTabChange }) => {
+  const [isCollapsed, setIsCollapsed] = useState(false);
+
   const navItems = [
     { id: 'home', label: '首页', icon: Home },
     { id: 'library', label: '书库', icon: Library },
@@ -49,19 +53,31 @@ export const Navigation: React.FC<NavigationProps> = ({ activeTab, onTabChange }
 
   return (
     <>
-      {/* Desktop Sidebar: Changed bg to gray-50 to separate from white main content */}
-      <nav className="hidden md:flex flex-col w-64 shrink-0 bg-gray-50 border-r border-border-subtle pt-8 pb-4 px-2 z-30 transition-colors duration-300 sticky top-0 h-screen overflow-y-auto custom-scrollbar">
-        <div className="px-4 mb-8 flex items-center gap-3 select-none shrink-0">
-            <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center text-white font-semibold text-sm shadow-sm transition-colors duration-300">M</div>
-            <span className="font-semibold text-lg tracking-tight text-gray-900">MangaLibrary</span>
+      <nav className={`hidden md:flex flex-col ${isCollapsed ? 'w-20' : 'w-64'} shrink-0 bg-gray-50 border-r border-border-subtle pt-6 pb-4 px-2 z-30 transition-all duration-300 ease-in-out sticky top-0 h-screen overflow-y-auto custom-scrollbar`}>
+        <div className={`mb-6 flex items-center ${isCollapsed ? 'justify-center' : 'px-4 gap-3'} select-none shrink-0 min-h-[40px] transition-all`}>
+            <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center text-white font-semibold text-sm shadow-sm transition-transform duration-300 shrink-0">M</div>
+            {!isCollapsed && <span className="font-semibold text-lg tracking-tight text-gray-900 whitespace-nowrap overflow-hidden animate-in fade-in slide-in-from-left-2 duration-300">MangaLibrary</span>}
         </div>
+        
         <div className="flex-1 flex flex-col gap-1 w-full min-h-0">
-          <div className="px-4 mb-2 text-xs font-semibold text-gray-500 uppercase tracking-wider shrink-0">菜单</div>
-          {navItems.map((item) => <NavButton key={item.id} id={item.id} label={item.label} icon={item.icon} isActive={activeTab === item.id} onClick={() => onTabChange(item.id)} />)}
+          {!isCollapsed && <div className="px-4 mb-2 text-xs font-semibold text-gray-500 uppercase tracking-wider shrink-0 whitespace-nowrap animate-in fade-in duration-300">菜单</div>}
+          {navItems.map((item) => <NavButton key={item.id} id={item.id} label={item.label} icon={item.icon} isActive={activeTab === item.id} onClick={() => onTabChange(item.id)} isCollapsed={isCollapsed} />)}
         </div>
-        <div className="mt-auto flex flex-col gap-1 shrink-0 pt-4">
-             <div className="px-4 mb-2 text-xs font-semibold text-gray-500 uppercase tracking-wider">系统</div>
-             {bottomItems.map((item) => <NavButton key={item.id} id={item.id} label={item.label} icon={item.icon} isActive={activeTab === item.id} onClick={() => onTabChange(item.id)} />)}
+        
+        <div className="mt-auto flex flex-col gap-1 shrink-0 pt-4 border-t border-border-subtle/50">
+             {!isCollapsed && <div className="px-4 mb-2 text-xs font-semibold text-gray-500 uppercase tracking-wider whitespace-nowrap animate-in fade-in duration-300">系统</div>}
+             {bottomItems.map((item) => <NavButton key={item.id} id={item.id} label={item.label} icon={item.icon} isActive={activeTab === item.id} onClick={() => onTabChange(item.id)} isCollapsed={isCollapsed} />)}
+             
+             <button
+                onClick={() => setIsCollapsed(!isCollapsed)}
+                className={`mt-2 relative w-full flex items-center ${isCollapsed ? 'justify-center' : 'gap-3 px-4'} py-2.5 rounded-md text-sm text-gray-500 hover:bg-black/5 hover:text-gray-900 transition-all outline-none`}
+                title={isCollapsed ? "展开" : "收起"}
+             >
+                <div className="transition-colors duration-200">
+                    {isCollapsed ? <PanelLeftOpen className="w-5 h-5" /> : <PanelLeftClose className="w-5 h-5" />}
+                </div>
+                {!isCollapsed && <span className="truncate">收起侧边栏</span>}
+             </button>
         </div>
       </nav>
 

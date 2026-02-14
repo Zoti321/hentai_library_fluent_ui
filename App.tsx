@@ -29,8 +29,15 @@ const App: React.FC = () => {
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [contextMenu, setContextMenu] = useState<{x: number, y: number, manga: MangaData} | null>(null);
 
-  // New State for Library Logic
+  // Data State
   const [library, setLibrary] = useState<MangaData[]>(libraryData);
+  const [historyItems, setHistoryItems] = useState<MangaData[]>([]);
+
+  // Initialize History based on mock data 'lastOpened' field
+  useEffect(() => {
+     setHistoryItems(libraryData.filter(m => !!m.lastOpened));
+  }, []);
+
   const [isMergeModalOpen, setIsMergeModalOpen] = useState(false);
   const [isAddChapterModalOpen, setIsAddChapterModalOpen] = useState(false);
   const [mergeCandidates, setMergeCandidates] = useState<MangaData[]>([]);
@@ -38,9 +45,31 @@ const App: React.FC = () => {
   useEffect(() => { if (isDarkMode) document.documentElement.classList.add('dark'); else document.documentElement.classList.remove('dark'); }, [isDarkMode]);
 
   const filteredLibraryData = useMemo(() => isR18Mode ? library : library.filter(manga => !manga.tags.general.includes('R18')), [isR18Mode, library]);
+  
   const handleMangaClick = (manga: MangaData) => { setSelectedManga(manga); setCurrentView('detail'); window.scrollTo(0,0); };
   const handleTabChange = (tab: string) => { setActiveTab(tab); if (['settings', 'home', 'library', 'browse', 'read'].includes(tab)) { setCurrentView(tab as ViewState); setSelectedManga(null); } else { setCurrentView('home'); } window.scrollTo(0,0); };
-  const handleStartReading = (manga: MangaData) => { const chapterToRead = manga.chapters?.[0] || null; if (chapterToRead) { setSelectedManga(manga); setCurrentChapter(chapterToRead); setCurrentView('reader'); } };
+  
+  const handleStartReading = (manga: MangaData) => { 
+      // Update history when reading starts
+      const now = new Date();
+      const timeString = "Just now"; // In real app: now.toISOString()
+      
+      const updatedManga = { ...manga, lastOpened: timeString };
+      
+      // Update Library
+      setLibrary(prev => prev.map(m => m.id === manga.id ? updatedManga : m));
+      
+      // Update History: Remove if exists, add to top
+      setHistoryItems(prev => [updatedManga, ...prev.filter(m => m.id !== manga.id)]);
+
+      const chapterToRead = manga.chapters?.[0] || null; 
+      if (chapterToRead) { 
+          setSelectedManga(updatedManga); 
+          setCurrentChapter(chapterToRead); 
+          setCurrentView('reader'); 
+      } 
+  };
+  
   const handleBackToLibrary = () => { setCurrentView('library'); setActiveTab('library'); setSelectedManga(null); };
   const handleContextMenu = (e: React.MouseEvent, manga: MangaData) => { e.preventDefault(); setContextMenu({ x: e.clientX, y: e.clientY, manga }); };
   const handleContextAction = (action: string) => { 
@@ -59,6 +88,15 @@ const App: React.FC = () => {
       } 
   };
   const handleRefresh = () => { setIsRefreshing(true); setTimeout(() => setIsRefreshing(false), 800); };
+
+  // History Management
+  const handleRemoveHistoryItem = (id: string) => {
+      setHistoryItems(prev => prev.filter(item => item.id !== id));
+  };
+  
+  const handleClearHistory = () => {
+      setHistoryItems([]);
+  };
 
   // Logic: Merge Functionality
   const performMerge = (targetId: string, sourceIds: string[]) => {
@@ -113,17 +151,19 @@ const App: React.FC = () => {
   if (currentView === 'reader' && selectedManga && currentChapter) return <Reader manga={selectedManga} chapter={currentChapter} onBack={() => { setCurrentView('detail'); setCurrentChapter(null); }} onNextChapter={() => console.log("Next")} onPrevChapter={() => console.log("Prev")} />;
 
   return (
-    <div className="flex min-h-screen bg-surface-alt font-sans text-gray-900 transition-colors duration-300">
+    <div className="flex h-screen bg-surface-alt font-sans text-gray-900 transition-colors duration-300 overflow-hidden">
       <MergeModal isOpen={isMergeModalOpen} onClose={() => setIsMergeModalOpen(false)} items={mergeCandidates} onConfirm={handleMergeConfirm} />
       <AddChapterSourceModal isOpen={isAddChapterModalOpen} onClose={() => setIsAddChapterModalOpen(false)} currentManga={selectedManga} library={library} onConfirm={handleAddChapterConfirm} />
       <EditMetadataModal isOpen={isEditModalOpen} onClose={() => setIsEditModalOpen(false)} manga={selectedManga} />
       {contextMenu && <ContextMenu x={contextMenu.x} y={contextMenu.y} manga={contextMenu.manga} onClose={() => setContextMenu(null)} onAction={handleContextAction} />}
+      
       <Navigation activeTab={activeTab} onTabChange={handleTabChange} />
-      <main className="flex-1 p-4 md:p-6 lg:p-8 pb-24 md:pb-8 max-w-full overflow-x-hidden">
+      
+      <main className="flex-1 p-4 md:p-6 lg:p-8 pb-24 md:pb-8 max-w-full overflow-x-hidden overflow-y-auto custom-scrollbar">
         {currentView === 'home' && <HomeView library={filteredLibraryData} onMangaClick={handleMangaClick} onStartReading={handleStartReading} onContextMenu={handleContextMenu} onRefresh={handleRefresh} isRefreshing={isRefreshing} layoutDensity={layoutDensity} />}
         {currentView === 'library' && <LibraryView library={library} isR18Mode={isR18Mode} onMangaClick={handleMangaClick} onStartReading={handleStartReading} onContextMenu={handleContextMenu} onRefresh={handleRefresh} isRefreshing={isRefreshing} onMergeRequest={handleMergeRequest} layoutDensity={layoutDensity} />}
         {currentView === 'browse' && <FileSystemView />}
-        {currentView === 'read' && <HistoryView history={filteredLibraryData} />}
+        {currentView === 'read' && <HistoryView history={historyItems} onMangaClick={handleMangaClick} onStartReading={handleStartReading} onRemoveItem={handleRemoveHistoryItem} onClearHistory={handleClearHistory} />}
         {currentView === 'detail' && <DetailView />}
         {currentView === 'settings' && <SettingsPage isR18Mode={isR18Mode} onToggleR18={setIsR18Mode} isDarkMode={isDarkMode} onToggleDarkMode={() => setIsDarkMode(!isDarkMode)} layoutDensity={layoutDensity} onLayoutDensityChange={setLayoutDensity} />}
       </main>

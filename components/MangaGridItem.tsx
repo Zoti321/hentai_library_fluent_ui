@@ -1,5 +1,5 @@
 import React from 'react';
-import { Play, Check } from 'lucide-react';
+import { Play, Check, MoreHorizontal } from 'lucide-react';
 import { MangaData, LayoutDensity } from '../types';
 
 export type ViewMode = 'grid' | 'list';
@@ -84,8 +84,41 @@ export const MangaGridItem: React.FC<MangaGridItemProps> = ({ manga, onClick, on
             </div>
         </div>
         
-        {manga.status === 'Reading' && !isCompact && (
-            <div className={`text-xs font-medium px-2 py-1 rounded transition-colors ${isSelected ? 'bg-primary/10 text-primary' : 'bg-gray-100 text-gray-600'}`}>阅读中</div>
+        {/* Interaction / Status Column */}
+        {!isSelectionMode && (
+            <div className="shrink-0 relative h-9 min-w-[140px] flex items-center justify-end">
+                {/* Default: Status Badge */}
+                <div className={`absolute right-0 top-1/2 -translate-y-1/2 transition-all duration-200 ${isSelected ? 'opacity-0' : 'group-hover:opacity-0 group-hover:translate-x-4'}`}>
+                    {manga.status && !isCompact && (
+                        <div className={`text-xs font-medium px-2.5 py-1 rounded-md transition-colors ${
+                            manga.status === 'Reading' 
+                                ? 'bg-primary/10 text-primary' 
+                                : 'bg-gray-100 text-gray-600'
+                        }`}>
+                            {getStatusLabel(manga.status)}
+                        </div>
+                    )}
+                </div>
+
+                {/* Hover: Action Buttons */}
+                <div className="absolute right-0 top-1/2 -translate-y-1/2 flex items-center gap-2 opacity-0 translate-x-4 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-200 z-10">
+                    <button 
+                        onClick={(e) => { e.stopPropagation(); onStartReading(manga); }}
+                        className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-primary text-white shadow-sm hover:bg-primary-hover active:scale-95 transition-all"
+                        title="开始阅读"
+                    >
+                        <Play className="w-3.5 h-3.5 fill-current" />
+                        <span className="text-xs font-bold">开始阅读</span>
+                    </button>
+                    <button 
+                        onClick={(e) => { e.stopPropagation(); onContextMenu(e, manga); }}
+                        className="p-1.5 rounded-lg border border-gray-200 bg-white text-gray-600 shadow-sm hover:bg-gray-50 hover:text-gray-900 active:scale-95 transition-all"
+                        title="更多操作"
+                    >
+                        <MoreHorizontal className="w-4 h-4" />
+                    </button>
+                </div>
+            </div>
         )}
       </div>
     );
